@@ -13,3 +13,4 @@ if(MSVC)
 endif()
 
 add_subdirectory(blackboard_app)
+add_subdirectory(APP_TEMPLATE)
