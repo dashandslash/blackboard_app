@@ -1,11 +1,8 @@
 #pragma once
 #include "renderer.h"
 
-#include <filesystem>
 #include <functional>
 #include <iostream>
-#include <string>
-#include <vector>
 
 struct Window;
 
@@ -36,11 +33,9 @@ public:
     {
         return std::chrono::duration<float>(std::chrono::steady_clock::now() - m_start_time).count();
     }
-    
-    Window& main_window();
 
 protected:
-    std::vector<Window> m_windows;
+    Window& m_window;
     bool m_running{true};
     uint32_t m_update_rate{16};
     renderer::Api m_renderer_api{renderer::Api::none};
