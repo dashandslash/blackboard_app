@@ -38,7 +38,7 @@ protected:
     Window& m_window;
     bool m_running{true};
     uint32_t m_update_rate{16};
-    renderer::Api m_renderer_api{renderer::Api::none};
+    renderer::Api m_renderer_api{renderer::Api::AUTO};
     inline static std::chrono::time_point<std::chrono::steady_clock> m_start_time =
       std::chrono::steady_clock::now();
     inline static std::chrono::time_point<std::chrono::steady_clock> m_prev_time =

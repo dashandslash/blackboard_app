@@ -53,16 +53,36 @@ execute_process(
 )
 
 set(imgui_SOURCE_SYMLINK_DIR ${FETCHCONTENT_BASE_DIR}/imgui)
+set(SDL_SOURCE_SYMLINK_DIR ${FETCHCONTENT_BASE_DIR}/SDL)
+set(SDL_visualtest_INCLUDE ${SDL2_SOURCE_DIR}/visualtest/include)
 
 file(GLOB imguizmo_SOURCES
      "${imguizmo_SOURCE_DIR}/*.h"
      "${imguizmo_SOURCE_DIR}/*.cpp"
 )
 
-file(GLOB imgui_SOURCES
-     "${imgui_SOURCE_SYMLINK_DIR}/*.h"
-     "${imgui_SOURCE_SYMLINK_DIR}/*.cpp"
-)
+set(imgui_SOURCES
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui.cpp
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui_demo.cpp
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui_widgets.cpp
+  ${imgui_SOURCE_SYMLINK_DIR}/misc/cpp/imgui_stdlib.cpp
+  ${imgui_SOURCE_SYMLINK_DIR}/backends/imgui_impl_sdl.cpp
+  # ${imgui_color_text_edit_SOURCE_DIR}/TextEditor.cpp
+  )
+
+set(imgui_HEADERS
+  ${CMAKE_CURRENT_SOURCE_DIR}/blackboard_core/gui/imconfig.h
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui.h
+  ${imgui_SOURCE_SYMLINK_DIR}/imstb_rectpack.h
+  ${imgui_SOURCE_SYMLINK_DIR}/imstb_truetype.h
+  ${imgui_SOURCE_SYMLINK_DIR}/imgui_internal.h
+  ${imgui_SOURCE_SYMLINK_DIR}/imstb_textedit.h
+  ${imgui_SOURCE_SYMLINK_DIR}/backends/imgui_impl_sdl.h
+  ${imgui_SOURCE_SYMLINK_DIR}/misc/cpp/imgui_stdlib.h
+  # ${imgui_color_text_edit_SOURCE_DIR}/TextEditor.h
+  )
 
 add_library(ImGui STATIC ${imgui_SOURCES} ${imguizmo_SOURCES})
 

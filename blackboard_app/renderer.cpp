@@ -30,14 +30,14 @@ bool init(Window &window, const Api renderer_api, const uint16_t width, const ui
     bgfx::renderFrame();    // single threaded mode
     switch (renderer_api)
     {
-        case Api::metal:
+        case Api::METAL:
             bgfx_init.type = bgfx::RendererType::Metal;    // auto choose renderer
             break;
-        case Api::d3d11:
+        case Api::D3D11:
             bgfx_init.type = bgfx::RendererType::Direct3D11;    // auto choose renderer
             break;
-        case Api::webgpu:
-            bgfx_init.type = bgfx::RendererType::WebGPU;    // auto choose renderer
+        case Api::WEBGL:
+            bgfx_init.type = bgfx::RendererType::OpenGL;    // auto choose renderer
             break;
         default:
             bgfx_init.type = bgfx::RendererType::Count;    // auto choose renderer
@@ -46,7 +46,7 @@ bool init(Window &window, const Api renderer_api, const uint16_t width, const ui
     const auto [drawable_width, drawable_height] = window.get_size_in_pixels();
     bgfx_init.resolution.width = drawable_width;
     bgfx_init.resolution.height = drawable_height;
-//    pd.nwh = renderer::native_window_handle(window.window);
+    pd.nwh = renderer::native_window_handle(window.window);
     bgfx_init.resolution.numBackBuffers = 1;
 
     bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4;

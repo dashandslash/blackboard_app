@@ -11,11 +11,11 @@ namespace renderer {
 
 enum class Api : uint8_t
 {
-    none = 0,
-    metal,
-    d3d11,
-    webgpu,
-    count
+    NONE = 0,
+    METAL,
+    D3D11,
+    WEBGL,
+    AUTO
 };
 
 bool init(Window &window, const Api, const uint16_t width, const uint16_t height);
