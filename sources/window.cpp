@@ -2,9 +2,14 @@
 
 #include <SDL/SDL.h>
 
+#include <iostream>
+
 namespace blackboard::app {
 
-Window::~Window() = default;
+Window::~Window()
+{
+    std::cout << "window destroyed" << std::endl;
+}
 
 void Window::init_platform_window()
 {
