@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(blackboard_app_template)
+project(APP_TEMPLATE)
 
 file(GLOB_RECURSE SOURCES ./**.cpp ./**.c)
 file(GLOB_RECURSE HEADERS ./**.hpp ./**.h)
