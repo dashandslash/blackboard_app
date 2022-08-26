@@ -34,9 +34,10 @@ public:
     return std::chrono::duration<float>(std::chrono::steady_clock::now() - m_start_time).count();
   }
 
+  bool running{true};
+
 protected:
   Window &m_window;
-  bool m_running{true};
   uint32_t m_update_rate{16};
   renderer::Api m_renderer_api{renderer::Api::AUTO};
   inline static std::chrono::time_point<std::chrono::steady_clock> m_start_time =
