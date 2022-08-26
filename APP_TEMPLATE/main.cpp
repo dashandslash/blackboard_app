@@ -15,7 +15,7 @@ static const std::string state_name{"default_state"};
 
 void init()
 {
-    blackboard::app::gui::set_dracula_theme();
+    blackboard::app::gui::set_blackboard_theme();
 }
 
 void app_update()

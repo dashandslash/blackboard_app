@@ -17,7 +17,7 @@ namespace gui {
 
 void init();
 
-void set_dracula_theme();
+void set_blackboard_theme();
 
 void dockspace();
 
