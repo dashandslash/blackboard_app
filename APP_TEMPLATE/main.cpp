@@ -15,30 +15,31 @@ static const std::string state_name{"default_state"};
 
 void init()
 {
-    blackboard::app::gui::set_blackboard_theme();
+  blackboard::app::gui::set_blackboard_theme();
 }
 
 void app_update()
 {
-    blackboard::app::gui::dockspace();
-    ImGui::ShowDemoWindow();
+  blackboard::app::gui::dockspace();
+  ImGui::ShowDemoWindow();
 }
 
 int main(int argc, char *argv[])
 {
-    static const std::string headless_arg{"headless"};
-    if (argc > 1 && std::string(argv[1]) == headless_arg)
-    {
-        blackboard::app::App app(headless_arg.c_str(), blackboard::app::renderer::Api::NONE);
-        app.run();
-    }
-    else
-    {
-        blackboard::app::App app("Example SDL", blackboard::app::renderer::Api::AUTO);    // autodetect renderer api
-        app.on_update = app_update;
-        app.on_init = init;
-        app.run();
-    }
+  static const std::string headless_arg{"headless"};
+  if (argc > 1 && std::string(argv[1]) == headless_arg)
+  {
+    blackboard::app::App app(headless_arg.c_str(), blackboard::app::renderer::Api::NONE);
+    app.run();
+  }
+  else
+  {
+    blackboard::app::App app("Example SDL",
+                             blackboard::app::renderer::Api::AUTO);    // autodetect renderer api
+    app.on_update = app_update;
+    app.on_init = init;
+    app.run();
+  }
 
-    return 0;
+  return 0;
 }

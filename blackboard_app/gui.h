@@ -3,8 +3,7 @@
 #include <filesystem>
 #include <string>
 
-namespace bgfx
-{
+namespace bgfx {
 struct TextureHandle;
 }
 struct ImVec4;
@@ -28,7 +27,7 @@ void load_font(const std::filesystem::path &path, const float size, const bool s
 ImVec4 string_hex_to_rgba_float(const std::string &color);
 
 // bgfx texture handle to imgui texture id
-void* toId(bgfx::TextureHandle _handle, uint8_t _flags, uint8_t _mip);
+void *toId(bgfx::TextureHandle _handle, uint8_t _flags, uint8_t _mip);
 
 }    // namespace gui
 }    // namespace blackboard::app
