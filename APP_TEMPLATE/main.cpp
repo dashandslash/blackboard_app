@@ -1,5 +1,3 @@
-#define SDL_MAIN_HANDLED
-
 #include <blackboard_app/app.h>
 #include <blackboard_app/gui.h>
 #include <blackboard_app/resources.h>
@@ -9,8 +7,6 @@
 #include <filesystem>
 #include <iostream>
 #include <sstream>
-
-static const std::string state_name{"default_state"};
 
 void init()
 {
