@@ -2,6 +2,7 @@
 
 #include <blackboard_app/app.h>
 #include <blackboard_app/gui.h>
+#include <blackboard_app/resources.h>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -16,6 +17,8 @@ static const std::string state_name{"default_state"};
 void init()
 {
   blackboard::app::gui::set_blackboard_theme();
+  blackboard::app::gui::load_font(
+    blackboard::app::resources::path() / "assets/fonts/Inter/Inter-Light.otf", 12.0f);
 }
 
 void app_update()
