@@ -42,16 +42,16 @@ target_compile_definitions(${PROJECT_NAME}
 
 # Copy assets folder in the Resources folder of binaray 
 
-add_dependencies(${PROJECT_NAME} copy_assets)
+add_dependencies(${PROJECT_NAME} "${PROJECT_NAME}_copy_assets")
 
 if(APPLE)
-add_custom_target(copy_assets ALL
+add_custom_target("${PROJECT_NAME}_copy_assets" ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     "${CMAKE_CURRENT_LIST_DIR}/assets"
     "$<TARGET_FILE_DIR:${PROJECT_NAME}>/../Resources/assets"
 )
 else()
-add_custom_target(copy_assets ALL
+add_custom_target("${PROJECT_NAME}_copy_assets" ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_CURRENT_LIST_DIR}/assets
     "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/assets"
