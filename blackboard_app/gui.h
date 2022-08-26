@@ -16,6 +16,8 @@ namespace gui {
 
 void init();
 
+bool isInit();
+
 void set_blackboard_theme();
 
 void dockspace();

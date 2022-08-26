@@ -32,8 +32,16 @@ void init()
   }
 }
 
+bool isInit()
+{
+  return ImGui::GetCurrentContext();
+}
+
 void set_blackboard_theme()
 {
+  if (!isInit())
+    return;
+
   ImGui::StyleColorsDark();
 
   static ImVec4 background{string_hex_to_rgba_float("#282a36ff")};
@@ -132,6 +140,9 @@ void set_blackboard_theme()
 
 void load_font(const std::filesystem::path &path, const float size, const bool set_as_default)
 {
+  if (!isInit())
+    return;
+
   ImFontConfig font_config;
   font_config.RasterizerMultiply = 1.5f;
   font_config.OversampleH = 4;
@@ -151,6 +162,9 @@ void load_font(const std::filesystem::path &path, const float size, const bool s
 
 void dockspace()
 {
+  if (!isInit())
+    return;
+
   static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
