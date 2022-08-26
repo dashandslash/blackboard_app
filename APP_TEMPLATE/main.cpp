@@ -5,8 +5,6 @@
 #include <blackboard_app/resources.h>
 
 #include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <imguizmo/ImGuizmo.h>
 
 #include <filesystem>
 #include <iostream>
@@ -29,20 +27,11 @@ void app_update()
 
 int main(int argc, char *argv[])
 {
-  static const std::string headless_arg{"headless"};
-  if (argc > 1 && std::string(argv[1]) == headless_arg)
-  {
-    blackboard::app::App app(headless_arg.c_str(), blackboard::app::renderer::Api::NONE);
-    app.run();
-  }
-  else
-  {
-    blackboard::app::App app("Example SDL",
-                             blackboard::app::renderer::Api::AUTO);    // autodetect renderer api
-    app.on_update = app_update;
-    app.on_init = init;
-    app.run();
-  }
+  blackboard::app::App app("Example SDL",
+                           blackboard::app::renderer::Api::AUTO);    // autodetect renderer api
+  app.on_update = app_update;
+  app.on_init = init;
+  app.run();
 
   return 0;
 }
