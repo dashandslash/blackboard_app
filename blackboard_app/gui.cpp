@@ -138,15 +138,16 @@ void set_blackboard_theme()
   ImGui::GetStyle().TabRounding = 0.0f;
 }
 
-void load_font(const std::filesystem::path &path, const float size, const bool set_as_default)
+void load_font(const std::filesystem::path &path, const float size, const bool set_as_default,
+               const int oversample_h, const int oversample_v, const float rasterizer_multiply)
 {
   if (!isInit())
     return;
 
   ImFontConfig font_config;
-  font_config.RasterizerMultiply = 1.5f;
-  font_config.OversampleH = 4;
-  font_config.OversampleV = 4;
+  font_config.RasterizerMultiply = rasterizer_multiply;
+  font_config.OversampleH = oversample_h;
+  font_config.OversampleV = oversample_v;
   auto &io = ImGui::GetIO();
   if (path.extension() != ".ttf" && path.extension() != ".otf")
   {
