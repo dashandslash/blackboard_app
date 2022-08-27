@@ -1,6 +1,7 @@
 #pragma once
 #include "renderer.h"
 
+#include <chrono>
 #include <functional>
 #include <iostream>
 
