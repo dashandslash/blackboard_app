@@ -24,8 +24,6 @@ bool init(Window &window, const Api renderer_api, const uint16_t width, const ui
   //        std::cout << "SDL_SysWMinfo could not be retrieved. SDL_Error: " <<
   //        SDL_GetError() << std::endl; return false;
   //    }
-
-  bgfx::PlatformData pd{};
   bgfx::Init bgfx_init;
   bgfx::renderFrame();    // single threaded mode
   switch (renderer_api)
@@ -46,11 +44,9 @@ bool init(Window &window, const Api renderer_api, const uint16_t width, const ui
   const auto [drawable_width, drawable_height] = window.get_size_in_pixels();
   bgfx_init.resolution.width = drawable_width;
   bgfx_init.resolution.height = drawable_height;
-  pd.nwh = renderer::native_window_handle(window.window);
   bgfx_init.resolution.numBackBuffers = 1;
-
   bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4;
-  bgfx_init.platformData = pd;
+  bgfx_init.platformData.nwh = renderer::native_window_handle(window.window);
   bgfx::init(bgfx_init);
 
   bgfx::setDebug(BGFX_DEBUG_TEXT);

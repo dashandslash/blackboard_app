@@ -12,16 +12,15 @@ void init()
   ImGui::CreateContext();
   // Set up input output configs
   ImGuiIO &io = ImGui::GetIO();
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;    // Enable Keyboard Controls
-  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
   io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
-  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport /
-    // Platform Windows
   io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
 
   ImGui::StyleColorsDark();
 
-  // Setup styles
+  // Setup friendly style for multiviewport
   ImGuiStyle &style = ImGui::GetStyle();
   if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
   {
@@ -56,14 +55,14 @@ void set_blackboard_theme()
   static auto red{string_hex_to_rgba_float("#ff5555ff")};
   static auto yellow{string_hex_to_rgba_float("#f1fa8cff")};
 
-  const auto dark_alpha_selection{selection * ImVec4(1.0f, 1.0f, 1.0f, 0.5f)};
-  const auto dark_alpha_purple{purple * ImVec4(1.0f, 1.0f, 1.0f, 0.3f)};
-  const auto dark_background{background * ImVec4(0.65f, 0.65f, 0.65f, 1.0f)};
-  const auto dark_alpha_red{red * ImVec4(1.0f, 1.0f, 1.0f, 0.10f)};
+  const auto dark_alpha_selection{selection * ImVec4{1.0f, 1.0f, 1.0f, 0.5f}};
+  const auto dark_alpha_purple{purple * ImVec4{1.0f, 1.0f, 1.0f, 0.3f}};
+  const auto dark_background{background * ImVec4{0.65f, 0.65f, 0.65f, 1.0f}};
+  const auto dark_alpha_red{red * ImVec4{1.0f, 1.0f, 1.0f, 0.10f}};
 
-  auto &colors = ImGui::GetStyle().Colors;
+  auto &colors{ImGui::GetStyle().Colors};
 
-  const auto IconColour = ImVec4(0.718, 0.62f, 0.86f, 1.00f);
+  const auto IconColour{ImVec4{0.718, 0.62f, 0.86f, 1.00f}};
   colors[ImGuiCol_Text] = foreground;
   colors[ImGuiCol_TextSelectedBg] = comment;
   colors[ImGuiCol_TextDisabled] = string_hex_to_rgba_float("#666666ff");
@@ -73,40 +72,40 @@ void set_blackboard_theme()
 
   colors[ImGuiCol_PopupBg] = background;
   colors[ImGuiCol_Border] = dark_alpha_purple;
-  colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  colors[ImGuiCol_BorderShadow] = ImVec4{0.00f, 0.00f, 0.00f, 0.00f};
   colors[ImGuiCol_FrameBg] = selection;
-  colors[ImGuiCol_FrameBgHovered] = selection * ImVec4(1.1f, 1.1f, 1.1f, 1.0f);
-  colors[ImGuiCol_FrameBgActive] = selection * ImVec4(1.2f, 1.2f, 1.2f, 1.0f);
+  colors[ImGuiCol_FrameBgHovered] = selection * ImVec4{1.1f, 1.1f, 1.1f, 1.0f};
+  colors[ImGuiCol_FrameBgActive] = selection * ImVec4{1.2f, 1.2f, 1.2f, 1.0f};
 
-  colors[ImGuiCol_TitleBg] = (selection + background) * ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-  colors[ImGuiCol_TitleBgActive] = (selection + background) * ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-  colors[ImGuiCol_TitleBgCollapsed] = (selection + background) * ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+  colors[ImGuiCol_TitleBg] = (selection + background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
+  colors[ImGuiCol_TitleBgActive] = (selection + background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
+  colors[ImGuiCol_TitleBgCollapsed] = (selection + background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
   colors[ImGuiCol_MenuBarBg] = selection;
 
-  colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.39f);
+  colors[ImGuiCol_ScrollbarBg] = ImVec4{0.02f, 0.02f, 0.02f, 0.39f};
   colors[ImGuiCol_ScrollbarGrab] = dark_alpha_selection;
-  colors[ImGuiCol_ScrollbarGrabActive] = dark_alpha_selection * ImVec4(1.3f, 1.3f, 1.3f, 1.3f);
-  colors[ImGuiCol_ScrollbarGrabHovered] = dark_alpha_selection * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
+  colors[ImGuiCol_ScrollbarGrabActive] = dark_alpha_selection * ImVec4{1.3f, 1.3f, 1.3f, 1.3f};
+  colors[ImGuiCol_ScrollbarGrabHovered] = dark_alpha_selection * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
 
   colors[ImGuiCol_CheckMark] = comment;
   colors[ImGuiCol_SliderGrab] = comment;
-  colors[ImGuiCol_SliderGrabActive] = comment * ImVec4(1.3f, 1.3f, 1.3f, 1.3f);
+  colors[ImGuiCol_SliderGrabActive] = comment * ImVec4{1.3f, 1.3f, 1.3f, 1.3f};
   colors[ImGuiCol_Button] = comment;
-  colors[ImGuiCol_ButtonHovered] = comment * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
-  colors[ImGuiCol_ButtonActive] = comment * ImVec4(1.3f, 1.3f, 1.3f, 1.3f);
+  colors[ImGuiCol_ButtonHovered] = comment * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
+  colors[ImGuiCol_ButtonActive] = comment * ImVec4{1.3f, 1.3f, 1.3f, 1.3f};
 
   colors[ImGuiCol_Separator] = selection;
   colors[ImGuiCol_SeparatorHovered] = selection;
   colors[ImGuiCol_SeparatorActive] = selection;
 
   colors[ImGuiCol_ResizeGrip] = dark_alpha_purple;
-  colors[ImGuiCol_ResizeGripHovered] = dark_alpha_purple * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
-  colors[ImGuiCol_ResizeGripActive] = dark_alpha_purple * ImVec4(1.3f, 1.3f, 1.3f, 1.3f);
+  colors[ImGuiCol_ResizeGripHovered] = dark_alpha_purple * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
+  colors[ImGuiCol_ResizeGripActive] = dark_alpha_purple * ImVec4{1.3f, 1.3f, 1.3f, 1.3f};
 
   colors[ImGuiCol_PlotLines] = yellow;
-  colors[ImGuiCol_PlotLinesHovered] = yellow * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
+  colors[ImGuiCol_PlotLinesHovered] = yellow * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
   colors[ImGuiCol_PlotHistogram] = yellow;
-  colors[ImGuiCol_PlotHistogramHovered] = yellow * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
+  colors[ImGuiCol_PlotHistogramHovered] = yellow * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
 
   colors[ImGuiCol_DragDropTarget] = red;
 
@@ -116,14 +115,14 @@ void set_blackboard_theme()
   colors[ImGuiCol_ModalWindowDimBg] = dark_alpha_red;
 
   colors[ImGuiCol_Header] = dark_alpha_selection;
-  colors[ImGuiCol_HeaderHovered] = dark_alpha_selection * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
-  colors[ImGuiCol_HeaderActive] = dark_alpha_selection * ImVec4(1.3f, 1.3f, 1.3f, 1.3f);
+  colors[ImGuiCol_HeaderHovered] = dark_alpha_selection * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
+  colors[ImGuiCol_HeaderActive] = dark_alpha_selection * ImVec4{1.3f, 1.3f, 1.3f, 1.3f};
 
   colors[ImGuiCol_Tab] = comment;
-  colors[ImGuiCol_TabHovered] = comment * ImVec4(1.2f, 1.2f, 1.2f, 1.2f);
-  colors[ImGuiCol_TabActive] = comment * ImVec4(1.3f, 1.3f, 1.3f, 1.3f);
-  colors[ImGuiCol_TabUnfocused] = comment * ImVec4(0.5f, 0.5f, 0.5f, 0.5f);
-  colors[ImGuiCol_TabUnfocusedActive] = comment * ImVec4(0.5f, 0.5f, 0.5f, 0.5f);
+  colors[ImGuiCol_TabHovered] = comment * ImVec4{1.2f, 1.2f, 1.2f, 1.2f};
+  colors[ImGuiCol_TabActive] = comment * ImVec4{1.3f, 1.3f, 1.3f, 1.3f};
+  colors[ImGuiCol_TabUnfocused] = comment * ImVec4{0.5f, 0.5f, 0.5f, 0.5f};
+  colors[ImGuiCol_TabUnfocusedActive] = comment * ImVec4{0.5f, 0.5f, 0.5f, 0.5f};
 
   colors[ImGuiCol_DockingEmptyBg] = dark_background;
   colors[ImGuiCol_DockingPreview] = dark_alpha_purple;
@@ -132,10 +131,16 @@ void set_blackboard_theme()
   colors[ImGuiCol_TableBorderLight] = dark_alpha_purple;
   colors[ImGuiCol_TableBorderStrong] = dark_alpha_purple;
 
-  ImGui::GetStyle().FramePadding = {1.0f, 1.0f};
-  ImGui::GetStyle().CellPadding = {2.0f, 2.0f};
-  ImGui::GetStyle().TabBorderSize = 1.0f;
-  ImGui::GetStyle().TabRounding = 0.0f;
+  auto &style{ImGui::GetStyle()};
+  style.FramePadding = {2.0f, 2.0f};
+  style.CellPadding = {2.0f, 2.0f};
+  style.TabBorderSize = 1.0f;
+  style.TabRounding = 1.0f;
+  style.ScrollbarRounding = 2.0f;
+  style.GrabRounding = 2.0f;
+  style.WindowRounding = 2.0f;
+  style.ChildRounding = 2.0f;
+  style.FrameRounding = 2.0f;
 }
 
 void load_font(const std::filesystem::path &path, const float size, const bool set_as_default,
@@ -148,7 +153,11 @@ void load_font(const std::filesystem::path &path, const float size, const bool s
   font_config.RasterizerMultiply = rasterizer_multiply;
   font_config.OversampleH = oversample_h;
   font_config.OversampleV = oversample_v;
-  auto &io = ImGui::GetIO();
+  auto &io{ImGui::GetIO()};
+  if (!std::filesystem::exists(path))
+  {
+    return;
+  }
   if (path.extension() != ".ttf" && path.extension() != ".otf")
   {
     return;
@@ -166,14 +175,14 @@ void dockspace()
   if (!isInit())
     return;
 
-  static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+  const static ImGuiDockNodeFlags dockspace_flags{ImGuiDockNodeFlags_None};
 
-  ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
-                                  ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                                  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                                  ImGuiWindowFlags_NoNavFocus;
+  const static ImGuiWindowFlags window_flags{
+    ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+    ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
+    ImGuiWindowFlags_NoNavFocus};
 
-  const ImGuiViewport *viewport = ImGui::GetMainViewport();
+  const ImGuiViewport *viewport{ImGui::GetMainViewport()};
   ImGui::SetNextWindowPos(viewport->WorkPos);
   ImGui::SetNextWindowSize(viewport->WorkSize);
   ImGui::SetNextWindowViewport(viewport->ID);
@@ -187,10 +196,10 @@ void dockspace()
   ImGui::PopStyleVar(3);
 
   // Submit the DockSpace
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO &io{ImGui::GetIO()};
   if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
   {
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    ImGuiID dockspace_id{ImGui::GetID("main_dockspace")};
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
   }
   ImGui::End();
