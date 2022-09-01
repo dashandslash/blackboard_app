@@ -5,6 +5,7 @@
 #include <imgui/imgui_internal.h>
 
 namespace blackboard::app::gui {
+
 void init()
 {
   // Setup Dear ImGui context
@@ -143,7 +144,7 @@ void set_blackboard_theme()
   style.FrameRounding = 2.0f;
 }
 
-void load_font(const std::filesystem::path &path, const float size, const bool set_as_default,
+void load_font(const std::filesystem::path &path, const float size, const float ddpi, const bool set_as_default,
                const int oversample_h, const int oversample_v, const float rasterizer_multiply)
 {
   if (!isInit())
@@ -162,12 +163,15 @@ void load_font(const std::filesystem::path &path, const float size, const bool s
   {
     return;
   }
-  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size, &font_config);
+  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * ddpi, &font_config);
   // setup default font
   if (set_as_default)
   {
     io.FontDefault = io.Fonts->Fonts.back();
   }
+#ifdef __APPLE__
+  io.FontGlobalScale = 1.0f / ddpi;
+#endif
 }
 
 void dockspace()

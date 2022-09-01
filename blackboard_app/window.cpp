@@ -34,6 +34,15 @@ std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const
   return {w, h};
 }
 
+std::pair<uint16_t, uint16_t> Window::get_ddpi() const
+{
+  int w, h;
+  int display_w, display_h;
+  SDL_GetWindowSize(window, &w, &h);
+  SDL_GL_GetDrawableSize(window, &display_w, &display_h);
+  return {(float)display_w / w, (float)display_h / h};
+}
+
 std::pair<uint16_t, uint16_t> Window::get_position() const
 {
   int x{0u}, y{0u};

@@ -12,6 +12,7 @@ struct Window
   void init_platform_window();
 
   std::pair<uint16_t, uint16_t> get_size_in_pixels() const;
+  std::pair<uint16_t, uint16_t> get_ddpi() const;
 
   // get position
   std::pair<uint16_t, uint16_t> get_position() const;

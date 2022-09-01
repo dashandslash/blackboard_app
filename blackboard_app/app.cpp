@@ -18,7 +18,7 @@ namespace blackboard::app {
 
 App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width,
          const uint16_t height, const bool fullscreen)
-  : m_window(*new Window())
+  : main_window(*new Window())
 {
   if (renderer_api == renderer::Api::NONE)
     return;
@@ -28,20 +28,20 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
     std::cout << "Error: " << SDL_GetError() << std::endl;
   }
 
-  m_window.title = app_name;
-  m_window.width = width;
-  m_window.height = height;
-  m_window.fullscreen = fullscreen;
+  main_window.title = app_name;
+  main_window.width = width;
+  main_window.height = height;
+  main_window.fullscreen = fullscreen;
 
   SDL_SetHint(SDL_HINT_RENDER_DRIVER, "metal");
-  m_window.init_platform_window();
+  main_window.init_platform_window();
 
   gui::init();
 
-  renderer::init(m_window, renderer_api, m_window.width, m_window.height);
-  renderer::ImGui_Impl_sdl_bgfx_Init(m_window.imgui_view_id);
+  renderer::init(main_window, renderer_api, main_window.width, main_window.height);
+  renderer::ImGui_Impl_sdl_bgfx_Init(main_window.imgui_view_id);
 
-  ImGui_ImplSDL2_InitForMetal(m_window.window);
+  ImGui_ImplSDL2_InitForMetal(main_window.window);
 }
 
 void App::run()
@@ -56,29 +56,29 @@ void App::run()
       layout_ui = resources::path() / "assets/layouts/default_imgui.ini";
     }
     ImGui::LoadIniSettingsFromDisk(layout_ui.string().c_str());
-    const auto [drawable_width, drawable_height] = m_window.get_size_in_pixels();
+    const auto [drawable_width, drawable_height] = main_window.get_size_in_pixels();
     on_resize(drawable_width, drawable_height);
 
     SDL_Event event;
     while (running)
     {
-      while (m_window.window != nullptr && SDL_PollEvent(&event))
+      while (main_window.window != nullptr && SDL_PollEvent(&event))
       {
         ImGui_ImplSDL2_ProcessEvent(&event);
 
         if (event.type == SDL_QUIT)
           running = false;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
-            event.window.windowID == SDL_GetWindowID(m_window.window))
+            event.window.windowID == SDL_GetWindowID(main_window.window))
           running = false;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
           const auto width = event.window.data1;
           const auto height = event.window.data2;
-          m_window.width = width;
-          m_window.height = height;
-          renderer::ImGui_Impl_sdl_bgfx_Resize(m_window.window);
-          const auto [drawable_width, drawable_height] = m_window.get_size_in_pixels();
+          main_window.width = width;
+          main_window.height = height;
+          renderer::ImGui_Impl_sdl_bgfx_Resize(main_window.window);
+          const auto [drawable_width, drawable_height] = main_window.get_size_in_pixels();
           on_resize(drawable_width, drawable_height);
         }
       }
@@ -92,7 +92,7 @@ void App::run()
       m_prev_time = std::chrono::steady_clock::now();
 
       ImGui::Render();
-      renderer::ImGui_Impl_sdl_bgfx_Render(m_window.imgui_view_id, ImGui::GetDrawData(), 0x000000FF);
+      renderer::ImGui_Impl_sdl_bgfx_Render(main_window.imgui_view_id, ImGui::GetDrawData(), 0x000000FF);
 
       if (const auto io = ImGui::GetIO(); io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
       {
@@ -125,7 +125,7 @@ App::~App()
     ImGui::DestroyContext();
     bgfx::shutdown();
 
-    SDL_DestroyWindow(m_window.window);
+    SDL_DestroyWindow(main_window.window);
     SDL_Quit();
   }
 }
