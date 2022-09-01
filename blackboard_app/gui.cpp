@@ -163,14 +163,14 @@ void load_font(const std::filesystem::path &path, const float size, const float 
   {
     return;
   }
-  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * ddpi, &font_config);
+  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * (ddpi / 96.f), &font_config);
   // setup default font
   if (set_as_default)
   {
     io.FontDefault = io.Fonts->Fonts.back();
   }
 #ifdef __APPLE__
-  io.FontGlobalScale = 1.0f / ddpi;
+  io.FontGlobalScale = 1.0f / (ddpi / 96.f);
 #endif
 }
 
@@ -182,9 +182,8 @@ void dockspace()
   const static ImGuiDockNodeFlags dockspace_flags{ImGuiDockNodeFlags_None};
 
   const static ImGuiWindowFlags window_flags{
-    ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-    ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
-    ImGuiWindowFlags_NoNavFocus};
+    ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus};
 
   const ImGuiViewport *viewport{ImGui::GetMainViewport()};
   ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -212,10 +211,8 @@ void dockspace()
 ImVec4 string_hex_to_rgba_float(const std::string &color)
 {
   assert(color.size() == 9);
-  return {std::stoul(color.substr(1, 2), nullptr, 16) / 255.0f,
-          std::stoul(color.substr(3, 2), nullptr, 16) / 255.0f,
-          std::stoul(color.substr(5, 2), nullptr, 16) / 255.0f,
-          std::stoul(color.substr(7, 2), nullptr, 16) / 255.0f};
+  return {std::stoul(color.substr(1, 2), nullptr, 16) / 255.0f, std::stoul(color.substr(3, 2), nullptr, 16) / 255.0f,
+          std::stoul(color.substr(5, 2), nullptr, 16) / 255.0f, std::stoul(color.substr(7, 2), nullptr, 16) / 255.0f};
 }
 
 void *toId(bgfx::TextureHandle _handle, uint8_t _flags, uint8_t _mip)
@@ -236,4 +233,4 @@ void *toId(bgfx::TextureHandle _handle, uint8_t _flags, uint8_t _mip)
   return tex.id;
 }
 
-}    // namespace blackboard::app::gui
+}  // namespace blackboard::app::gui

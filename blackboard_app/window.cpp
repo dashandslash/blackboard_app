@@ -6,7 +6,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-#endif // _WIN32
+#endif  // _WIN32
 
 namespace blackboard::app {
 
@@ -17,14 +17,13 @@ Window::~Window()
 
 void Window::init_platform_window()
 {
-  window = SDL_CreateWindow(
-    title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
-    (fullscreen ? (SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_BORDERLESS) : SDL_WINDOW_SHOWN) |
-      SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+  window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
+                            (fullscreen ? (SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_BORDERLESS) : SDL_WINDOW_SHOWN) |
+                              SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
 #ifdef _WIN32
   SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-#endif // _WIN32
+#endif  // _WIN32
 }
 
 std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const
@@ -34,13 +33,11 @@ std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const
   return {w, h};
 }
 
-std::pair<uint16_t, uint16_t> Window::get_ddpi() const
+float Window::get_ddpi() const
 {
-  int w, h;
-  int display_w, display_h;
-  SDL_GetWindowSize(window, &w, &h);
-  SDL_GL_GetDrawableSize(window, &display_w, &display_h);
-  return {(float)display_w / w, (float)display_h / h};
+  float ddpi, hdpi, vdpi;
+  SDL_GetDisplayDPI(SDL_GetWindowDisplayIndex(window), &ddpi, &hdpi, &vdpi);
+  return ddpi;
 }
 
 std::pair<uint16_t, uint16_t> Window::get_position() const
@@ -50,4 +47,4 @@ std::pair<uint16_t, uint16_t> Window::get_position() const
   return {x, y};
 }
 
-}    // namespace blackboard::app
+}  // namespace blackboard::app

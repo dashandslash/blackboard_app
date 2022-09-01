@@ -11,7 +11,7 @@ namespace blackboard::app {
 
 class App
 {
-public:
+  public:
   App() = delete;
   App(const char *app_name, const renderer::Api renderer_api, const uint16_t width = 1280u,
       const uint16_t height = 720u, const bool fullscreen = false);
@@ -19,10 +19,9 @@ public:
   void run();
   std::function<void()> on_init{[]() { std::cout << "init function not defined" << std::endl; }};
   std::function<void()> on_update{[]() { std::cout << "update function not defined" << std::endl; }};
-  std::function<void(const uint16_t, const uint16_t)> on_resize{
-    [](const uint16_t width, const uint16_t height) {
-      std::cout << "window resize function not defined" << std::endl;
-    }};
+  std::function<void(const uint16_t, const uint16_t)> on_resize{[](const uint16_t width, const uint16_t height) {
+    std::cout << "window resize function not defined" << std::endl;
+  }};
 
   static float delta_time()
   {
@@ -38,13 +37,11 @@ public:
   bool running{true};
   Window &main_window;
 
-protected:
+  protected:
   uint32_t m_update_rate{16};
   renderer::Api m_renderer_api{renderer::Api::AUTO};
-  inline static std::chrono::time_point<std::chrono::steady_clock> m_start_time =
-    std::chrono::steady_clock::now();
-  inline static std::chrono::time_point<std::chrono::steady_clock> m_prev_time =
-    std::chrono::steady_clock::now();
+  inline static std::chrono::time_point<std::chrono::steady_clock> m_start_time = std::chrono::steady_clock::now();
+  inline static std::chrono::time_point<std::chrono::steady_clock> m_prev_time = std::chrono::steady_clock::now();
 };
 
-}    // namespace blackboard::app
+}  // namespace blackboard::app

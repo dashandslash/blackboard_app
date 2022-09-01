@@ -14,12 +14,19 @@
 
 #include <iostream>
 
+#ifdef __WIN32__
+#include "Windows.h"
+#endif
+
 namespace blackboard::app {
 
-App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width,
-         const uint16_t height, const bool fullscreen)
-  : main_window(*new Window())
+App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width, const uint16_t height,
+         const bool fullscreen)
+    : main_window(*new Window())
 {
+#ifdef __WIN32__
+  SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+#endif
   if (renderer_api == renderer::Api::NONE)
     return;
 
@@ -130,4 +137,4 @@ App::~App()
   }
 }
 
-}    // namespace blackboard::app
+}  // namespace blackboard::app
