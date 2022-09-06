@@ -58,7 +58,8 @@ void set_blackboard_theme()
 
   const auto dark_alpha_selection{selection * ImVec4{1.0f, 1.0f, 1.0f, 0.5f}};
   const auto dark_alpha_purple{purple * ImVec4{1.0f, 1.0f, 1.0f, 0.3f}};
-  const auto dark_background{background * ImVec4{0.65f, 0.65f, 0.65f, 1.0f}};
+  const auto dark_background{background * ImVec4{0.35f, 0.35f, 0.35f, 1.0f}};
+  const auto darker_background{dark_background * ImVec4{0.15f, 0.15f, 0.15f, 1.0f}};
   const auto dark_alpha_red{red * ImVec4{1.0f, 1.0f, 1.0f, 0.10f}};
 
   auto &colors{ImGui::GetStyle().Colors};
@@ -68,19 +69,19 @@ void set_blackboard_theme()
   colors[ImGuiCol_TextSelectedBg] = comment;
   colors[ImGuiCol_TextDisabled] = string_hex_to_rgba_float("#666666ff");
 
-  colors[ImGuiCol_WindowBg] = background;
-  colors[ImGuiCol_ChildBg] = background;
+  colors[ImGuiCol_WindowBg] = dark_background;
+  colors[ImGuiCol_ChildBg] = dark_background;
 
-  colors[ImGuiCol_PopupBg] = background;
+  colors[ImGuiCol_PopupBg] = dark_background;
   colors[ImGuiCol_Border] = dark_alpha_purple;
   colors[ImGuiCol_BorderShadow] = ImVec4{0.00f, 0.00f, 0.00f, 0.00f};
   colors[ImGuiCol_FrameBg] = selection;
   colors[ImGuiCol_FrameBgHovered] = selection * ImVec4{1.1f, 1.1f, 1.1f, 1.0f};
   colors[ImGuiCol_FrameBgActive] = selection * ImVec4{1.2f, 1.2f, 1.2f, 1.0f};
 
-  colors[ImGuiCol_TitleBg] = (selection + background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
-  colors[ImGuiCol_TitleBgActive] = (selection + background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
-  colors[ImGuiCol_TitleBgCollapsed] = (selection + background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
+  colors[ImGuiCol_TitleBg] = (selection + dark_background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
+  colors[ImGuiCol_TitleBgActive] = (selection + dark_background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
+  colors[ImGuiCol_TitleBgCollapsed] = (selection + dark_background) * ImVec4{0.5f, 0.5f, 0.5f, 1.0f};
   colors[ImGuiCol_MenuBarBg] = selection;
 
   colors[ImGuiCol_ScrollbarBg] = ImVec4{0.02f, 0.02f, 0.02f, 0.39f};
@@ -125,7 +126,7 @@ void set_blackboard_theme()
   colors[ImGuiCol_TabUnfocused] = comment * ImVec4{0.5f, 0.5f, 0.5f, 0.5f};
   colors[ImGuiCol_TabUnfocusedActive] = comment * ImVec4{0.5f, 0.5f, 0.5f, 0.5f};
 
-  colors[ImGuiCol_DockingEmptyBg] = dark_background;
+  colors[ImGuiCol_DockingEmptyBg] = darker_background;
   colors[ImGuiCol_DockingPreview] = dark_alpha_purple;
 
   colors[ImGuiCol_TableHeaderBg] = comment;
