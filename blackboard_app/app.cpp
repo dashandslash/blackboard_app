@@ -14,22 +14,18 @@
 
 #include <iostream>
 
-#ifdef __WIN32__
-#include "Windows.h"
-#endif
-
 namespace blackboard::app {
 
 App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width, const uint16_t height,
          const bool fullscreen)
     : main_window{*new Window()}, m_renderer_api{renderer_api}
 {
-#ifdef __WIN32__
-  SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-#endif
   if (renderer_api == renderer::Api::NONE)
     return;
 
+  //Make process DPI aware on Windows
+  SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2");
+  SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0)
   {
     std::cout << "Error: " << SDL_GetError() << std::endl;
@@ -39,7 +35,6 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
   main_window.width = width;
   main_window.height = height;
   main_window.fullscreen = fullscreen;
-
 
   main_window.init_platform_window();
 
