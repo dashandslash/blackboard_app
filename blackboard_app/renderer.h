@@ -18,7 +18,7 @@ enum class Api : uint8_t
   AUTO
 };
 
-bool init(Window &window, const Api, const uint16_t width, const uint16_t height);
+bool init(Window &window, Api &, const uint16_t width, const uint16_t height);
 
 }    // namespace renderer
 }    // namespace blackboard::app

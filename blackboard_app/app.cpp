@@ -22,7 +22,7 @@ namespace blackboard::app {
 
 App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width, const uint16_t height,
          const bool fullscreen)
-    : main_window(*new Window())
+    : main_window{*new Window()}, m_renderer_api{renderer_api}
 {
 #ifdef __WIN32__
   SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
@@ -40,15 +40,31 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
   main_window.height = height;
   main_window.fullscreen = fullscreen;
 
-  SDL_SetHint(SDL_HINT_RENDER_DRIVER, "metal");
+
   main_window.init_platform_window();
 
   gui::init();
 
-  renderer::init(main_window, renderer_api, main_window.width, main_window.height);
+  renderer::init(main_window, m_renderer_api, main_window.width, main_window.height);
   renderer::ImGui_Impl_sdl_bgfx_Init(main_window.imgui_view_id);
 
-  ImGui_ImplSDL2_InitForMetal(main_window.window);
+  switch (m_renderer_api)
+  {
+    case renderer::Api::METAL:
+    {
+      ImGui_ImplSDL2_InitForMetal(main_window.window);
+      SDL_SetHint(SDL_HINT_RENDER_DRIVER, "metal");
+    }
+    break;
+    case renderer::Api::D3D11:
+    {
+      ImGui_ImplSDL2_InitForD3D(main_window.window);
+      SDL_SetHint(SDL_HINT_RENDER_DRIVER, "direct3d");
+    }
+    break;
+    default:
+      break;
+  }
 }
 
 void App::run()

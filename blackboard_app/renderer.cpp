@@ -15,7 +15,7 @@
 namespace blackboard::app {
 namespace renderer {
 
-bool init(Window &window, const Api renderer_api, const uint16_t width, const uint16_t height)
+bool init(Window &window, Api &renderer_api, const uint16_t width, const uint16_t height)
 {
   //    SDL_SysWMinfo wmi;
   //    SDL_VERSION(&wmi.version);
@@ -52,6 +52,18 @@ bool init(Window &window, const Api renderer_api, const uint16_t width, const ui
   bgfx::setDebug(BGFX_DEBUG_TEXT);
   bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x000000FF, 1.0f, 0);
   bgfx::setViewRect(0, 0, 0, drawable_width, drawable_height);
+
+  switch (bgfx::getRendererType())
+  {
+    case bgfx::RendererType::Direct3D11:
+      renderer_api = Api::D3D11;
+      break;
+    case bgfx::RendererType::Metal:
+      renderer_api = Api::METAL;
+      break;
+    default:
+      break;
+  }
 
   return true;
 }
