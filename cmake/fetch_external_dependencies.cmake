@@ -7,8 +7,8 @@ set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/.external)
 
 # SDL
 FetchContent_Declare(sdl
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-    GIT_TAG release-2.24.0
+    GIT_REPOSITORY git@github.com:dashandslash/SDL.git
+    GIT_TAG fix-compilation-on-osx-with-cmake-xcode-project-generation
     GIT_SHALLOW 1
 )
 FetchContent_GetProperties(sdl)
