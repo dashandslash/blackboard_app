@@ -164,14 +164,15 @@ void load_font(const std::filesystem::path &path, const float size, const float 
   {
     return;
   }
-  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * (ddpi / 96.f), &font_config);
+  float ratio{ddpi / 96.f};
+  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * ratio, &font_config);
   // setup default font
   if (set_as_default)
   {
     io.FontDefault = io.Fonts->Fonts.back();
   }
 #ifdef __APPLE__
-  io.FontGlobalScale = 1.0f / (ddpi / 96.f);
+  io.FontGlobalScale = 1.0f / floor(ratio);
 #endif
 }
 
