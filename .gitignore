@@ -1,5 +1,6 @@
 ## OSX artifacts
 .DS_Store
+**/.DS_Store
 
 .build*/
 .external/
