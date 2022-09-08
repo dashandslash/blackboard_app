@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 include(cmake/fetch_external_dependencies.cmake)
 
-set(PROJECT_NAME blackboard_app)
+set(PROJECT_NAME blackboard_app C CXX OBJC)
 project (${PROJECT_NAME})
 
 if(MSVC)
