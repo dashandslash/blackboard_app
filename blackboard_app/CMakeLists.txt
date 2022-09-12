@@ -15,6 +15,7 @@ target_link_libraries(${PROJECT_NAME}
     bx
     glm
     ImGui
+    spdlog
 )
 
 target_include_directories(${PROJECT_NAME}

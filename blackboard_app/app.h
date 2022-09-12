@@ -17,11 +17,9 @@ class App
       const uint16_t height = 720u, const bool fullscreen = false);
   ~App();
   void run();
-  std::function<void()> on_init{[]() { std::cout << "init function not defined" << std::endl; }};
-  std::function<void()> on_update{[]() { std::cout << "update function not defined" << std::endl; }};
-  std::function<void(const uint16_t, const uint16_t)> on_resize{[](const uint16_t width, const uint16_t height) {
-    std::cout << "window resize function not defined" << std::endl;
-  }};
+  std::function<void()> on_init{};
+  std::function<void()> on_update{};
+  std::function<void(const uint16_t, const uint16_t)> on_resize{};
 
   static float delta_time()
   {

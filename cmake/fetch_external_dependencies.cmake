@@ -24,14 +24,14 @@ endif()
 
 # imgui
 FetchContent_Declare(imgui
-    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_REPOSITORY git@github.com:ocornut/imgui.git
     GIT_TAG docking
     GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(imgui)
 
 FetchContent_Declare(imguizmo
-    GIT_REPOSITORY https://github.com/CedricGuillemet/ImGuizmo.git
+    GIT_REPOSITORY git@github.com:CedricGuillemet/ImGuizmo.git
     GIT_TAG master
     GIT_SHALLOW 1
 )
@@ -93,10 +93,19 @@ target_include_directories(ImGui
     $<BUILD_INTERFACE:${imgui_SOURCE_SYMLINK_DIR}>
 )
 
+# spdlog
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY git@github.com:gabime/spdlog.git
+    GIT_TAG v1.10.0
+    GIT_SHALLOW 1
+)
+FetchContent_MakeAvailable(spdlog)
+
 # glm
 FetchContent_Declare(
     glm
-    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_REPOSITORY git@github.com:g-truc/glm.git
     GIT_TAG master
     GIT_SHALLOW 1
 )
@@ -105,7 +114,7 @@ FetchContent_MakeAvailable(glm)
 # bgfx_cmake
 FetchContent_Declare(
     bgfx_cmake
-    GIT_REPOSITORY https://github.com/bkaradzic/bgfx.cmake.git
+    GIT_REPOSITORY git@github.com:bkaradzic/bgfx.cmake.git
     GIT_TAG master
     GIT_SHALLOW 1
 )

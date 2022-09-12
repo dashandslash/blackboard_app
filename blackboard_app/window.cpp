@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include "logger.h"
+
 #include <SDL/SDL.h>
 
 #include <iostream>
@@ -12,7 +14,7 @@ namespace blackboard::app {
 
 Window::~Window()
 {
-  std::cout << "window destroyed" << std::endl;
+  logger::logger->info("Window {} destroyed", title);
 }
 
 void Window::init_platform_window()
