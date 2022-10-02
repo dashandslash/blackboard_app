@@ -6,12 +6,20 @@ set(FETCHCONTENT_QUIET off)
 set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/.external)
 
 # SDL
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/sdl-src)
+    set(repo_sdl "file://${FETCHCONTENT_BASE_DIR}/sdl-src")
+    set(FETCHCONTENT_SOURCE_DIR_SDL ${FETCHCONTENT_BASE_DIR}/sdl-src)
+else()
+    set(repo_sdl "git@github.com:dashandslash/SDL.git")
+endif()
+
 FetchContent_Declare(sdl
-    GIT_REPOSITORY git@github.com:dashandslash/SDL.git
+    GIT_REPOSITORY ${repo_sdl}
     GIT_TAG fix-compilation-on-osx-with-cmake-xcode-project-generation
     GIT_SHALLOW 1
 )
 FetchContent_GetProperties(sdl)
+
 if(NOT sdl_POPULATED)
     FetchContent_Populate(sdl)
 
@@ -23,15 +31,28 @@ if(NOT sdl_POPULATED)
 endif()
 
 # imgui
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/imgui-src)
+    set(repo_imgui "file://${FETCHCONTENT_BASE_DIR}/imgui-src")
+    set(FETCHCONTENT_SOURCE_DIR_IMGUI ${FETCHCONTENT_BASE_DIR}/imgui-src)
+else()
+    set(repo_imgui "git@github.com:ocornut/imgui.git")
+endif()
 FetchContent_Declare(imgui
-    GIT_REPOSITORY git@github.com:ocornut/imgui.git
+    GIT_REPOSITORY ${repo_imgui}
     GIT_TAG docking
     GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(imgui)
 
+
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/imguizmo-src)
+    set(repo_imguizmo "file://${FETCHCONTENT_BASE_DIR}/imguizmo-src")
+    set(FETCHCONTENT_SOURCE_DIR_IMGUIZMO ${FETCHCONTENT_BASE_DIR}/imguizmo-src)
+else()
+    set(repo_imguizmo "git@github.com:CedricGuillemet/ImGuizmo.git")
+endif()
 FetchContent_Declare(imguizmo
-    GIT_REPOSITORY git@github.com:CedricGuillemet/ImGuizmo.git
+    GIT_REPOSITORY ${repo_imguizmo}
     GIT_TAG master
     GIT_SHALLOW 1
 )
@@ -94,38 +115,54 @@ target_include_directories(ImGui
 )
 
 # spdlog
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/spdlog-src)
+    set(repo_spdlog "file://${FETCHCONTENT_BASE_DIR}/spdlog-src")
+    set(FETCHCONTENT_SOURCE_DIR_SPDLOG ${FETCHCONTENT_BASE_DIR}/spdlog-src)
+else()
+    set(repo_spdlog "git@github.com:gabime/spdlog.git")
+endif()
+
 FetchContent_Declare(
     spdlog
-    GIT_REPOSITORY git@github.com:gabime/spdlog.git
+    GIT_REPOSITORY ${repo_spdlog}
     GIT_TAG v1.10.0
     GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(spdlog)
 
 # glm
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/glm-src)
+    set(repo_glm "file://${FETCHCONTENT_BASE_DIR}/glm-src")
+    set(FETCHCONTENT_SOURCE_DIR_GLM ${FETCHCONTENT_BASE_DIR}/glm-src)
+else()
+    set(repo_glm "git@github.com:g-truc/glm.git")
+endif()
+
 FetchContent_Declare(
     glm
-    GIT_REPOSITORY git@github.com:g-truc/glm.git
+    GIT_REPOSITORY ${repo_glm}
     GIT_TAG master
     GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(glm)
 
 # bgfx_cmake
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/bgfx_cmake-src)
+    set(repo_bgfx_cmake "file://${FETCHCONTENT_BASE_DIR}/bgfx_cmake-src")
+    set(FETCHCONTENT_SOURCE_DIR_BGFX_CMAKE ${FETCHCONTENT_BASE_DIR}/bgfx_cmake-src)
+else()
+    set(repo_bgfx_cmake "git@github.com:bkaradzic/bgfx.cmake.git")
+endif()
 FetchContent_Declare(
     bgfx_cmake
-    GIT_REPOSITORY git@github.com:bkaradzic/bgfx.cmake.git
+    GIT_REPOSITORY ${repo_bgfx_cmake}
     GIT_TAG master
     GIT_SHALLOW 1
 )
 FetchContent_GetProperties(bgfx_cmake)
 if(NOT bgfx_cmake_POPULATED)
     FetchContent_Populate(bgfx_cmake)
-    if(EMSCRIPTEN OR IOS)
-        set(BGFX_BUILD_TOOLS OFF CACHE INTERNAL "")
-    else()
-        set(BGFX_BUILD_TOOLS ON CACHE INTERNAL "")
-    endif()
+    set( BGFX_BUILD_TOOLS OFF CACHE INTERNAL "")
     set( BGFX_BUILD_EXAMPLES  OFF CACHE INTERNAL "" )
     set( BGFX_CUSTOM_TARGETS  OFF CACHE INTERNAL "" )
     add_subdirectory(${bgfx_cmake_SOURCE_DIR} ${bgfx_cmake_BINARY_DIR} EXCLUDE_FROM_ALL)

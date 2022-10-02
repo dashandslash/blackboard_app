@@ -9,7 +9,7 @@ add_library(${PROJECT_NAME} STATIC ${SOURCES} ${HEADERS})
 add_library(blackboard::app ALIAS ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
     SDL2-static
     bgfx
     bx
