@@ -13,3 +13,4 @@ include(cmake/fetch_external_dependencies.cmake)
 	
 add_subdirectory(blackboard_app)
 add_subdirectory(blackboard_gfx)
+add_subdirectory(projects)
