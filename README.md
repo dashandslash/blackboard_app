@@ -5,7 +5,7 @@ Blackboard App is a combination of SDL2, BGFX and IMGUI as base to create a desk
 Few steps are needed to create a new project using this repository as template:
 
  - Create your repo from this template
- - `git clone git@github.com:dashandslash/blackboard_app_template.git && cd blackboard_app_template`
+ - `git clone git@github.com:dashandslash/blackboard_app.git && cd blackboard_app`
  - `./create_project.sh NewProjectName`
  - `mkdir build_folder && cd build_folder`
  - `cmake .. -G [Xcode, "Visual Studio 17 2022", Ninja...]` this step will take couple of minutes as all the dependencies will be fetched and some will be built
