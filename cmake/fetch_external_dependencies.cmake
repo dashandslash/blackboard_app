@@ -3,19 +3,19 @@ cmake_minimum_required(VERSION 3.21)
 include(FetchContent)
 set(FETCHCONTENT_QUIET off)
 
-set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/.external)
+set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/_external)
 
 # SDL
 if(EXISTS ${FETCHCONTENT_BASE_DIR}/sdl-src)
     set(repo_sdl "file://${FETCHCONTENT_BASE_DIR}/sdl-src")
     set(FETCHCONTENT_SOURCE_DIR_SDL ${FETCHCONTENT_BASE_DIR}/sdl-src)
 else()
-    set(repo_sdl "git@github.com:dashandslash/SDL.git")
+    set(repo_sdl "git@github.com:libsdl-org/SDL.git")
 endif()
 
 FetchContent_Declare(sdl
     GIT_REPOSITORY ${repo_sdl}
-    GIT_TAG fix-compilation-on-osx-with-cmake-xcode-project-generation
+    GIT_TAG release-2.26.1
     GIT_SHALLOW 1
 )
 FetchContent_GetProperties(sdl)
