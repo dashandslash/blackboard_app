@@ -31,10 +31,12 @@ endif()
 
 function(copy_shaderc_binary output_path)
     if(APPLE)
+        set(shaderc_file shaderc)
         set(shaderc_output_path ${output_path}"/../Resources/tools/shaderc/shaderc")
         set(shaders_output_path ${output_path}"/../Resources/assets/shaders")
     else()
-        set(shaderc_output_path ${output_path}"/Resources/tools/shaderc/shaderc")
+        set(shaderc_file shaderc.exe)
+        set(shaderc_output_path ${output_path}"/Resources/tools/shaderc/shaderc.exe")
         set(shaders_output_path ${output_path}"/Resources/assets/shaders")
     endif()
 
@@ -46,7 +48,7 @@ function(copy_shaderc_binary output_path)
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${bgfx_cmake_SOURCE_DIR}/bgfx/examples/common/shaderlib.sh ${shaders_output_path}/common/shaderlib.sh
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${bgfx_cmake_SOURCE_DIR}/bgfx/examples/common/common.sh ${shaders_output_path}/common/common.sh
         
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${blackboard_app_gfx_BINARY_DIR}/${CMAKE_BUILD_TYPE}/shaderc ${shaderc_output_path}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${blackboard_app_gfx_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${shaderc_file} ${shaderc_output_path}
     )
 endfunction()
 
