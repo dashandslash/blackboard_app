@@ -15,7 +15,6 @@ add_dependencies(${PROJECT_NAME} shaderc)
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
     blackboard::app
-    Boost::process
 )
 
 target_include_directories(${PROJECT_NAME}

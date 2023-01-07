@@ -65,7 +65,7 @@ else()
 )
 endif()
 
-get_shaderc_binary_path("$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+copy_shaderc_binary("$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 
 # Create tree group to tidy the files inside IDEs
 
