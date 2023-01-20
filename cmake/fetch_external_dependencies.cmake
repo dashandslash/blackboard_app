@@ -156,7 +156,7 @@ endif()
 FetchContent_Declare(
     bgfx_cmake
     GIT_REPOSITORY ${repo_bgfx_cmake}
-    GIT_TAG master
+    GIT_TAG v1.118.8398-377
     GIT_SHALLOW 1
 )
 FetchContent_GetProperties(bgfx_cmake)
