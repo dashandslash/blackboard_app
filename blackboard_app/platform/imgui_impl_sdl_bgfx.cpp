@@ -3,8 +3,8 @@
 #include "fs_ocornut_imgui.bin.h"
 #include "vs_ocornut_imgui.bin.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_syswm.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/embedded_shader.h>
 #include <bx/math.h>
@@ -66,10 +66,10 @@ void *native_window_handle(void *window)
 {
   SDL_Window *sdl_window = (SDL_Window *)window;
   SDL_SysWMinfo wmi;
-  SDL_VERSION(&wmi.version);
-  if (!SDL_GetWindowWMInfo(sdl_window, &wmi))
-  {
-    return NULL;
+  int ok = SDL_GetWindowWMInfo(sdl_window, &wmi, SDL_SYSWM_CURRENT_VERSION);
+  if (ok != 0) {
+    const char* err = SDL_GetError();
+    return nullptr;
   }
 #if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #if ENTRY_CONFIG_USE_WAYLAND
@@ -153,7 +153,7 @@ void ImGui_Impl_sdl_bgfx_Resize(SDL_Window *window)
 {
   int drawable_width{0};
   int drawable_height{0};
-  SDL_GL_GetDrawableSize(window, &drawable_width, &drawable_height);
+  SDL_GetWindowSizeInPixels(window, &drawable_width, &drawable_height);
   ImGuiIO &io = ImGui::GetIO();
   io.DisplaySize = ImVec2((float)drawable_width, (float)drawable_height);
   bgfx::reset(drawable_width, drawable_height, BGFX_RESET_VSYNC | BGFX_RESET_MSAA_X4);

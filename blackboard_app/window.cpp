@@ -2,7 +2,7 @@
 
 #include "logger.h"
 
-#include <SDL/SDL.h>
+#include <SDL3/SDL.h>
 
 #include <iostream>
 
@@ -19,27 +19,26 @@ Window::~Window()
 
 void Window::init_platform_window()
 {
-  window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
-                            (fullscreen ? (SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_BORDERLESS) : SDL_WINDOW_SHOWN) |
-                              SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+  window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_RESIZABLE);
+  SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+  SDL_SetWindowFullscreen(window, static_cast<SDL_bool>(fullscreen));
 
-#ifdef _WIN32
-  SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-#endif  // _WIN32
+//#ifdef _WIN32
+//  SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+//#endif  // _WIN32
 }
 
 std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const
 {
   int w{0u}, h{0u};
-  SDL_GL_GetDrawableSize(window, &w, &h);
+  SDL_GetWindowSizeInPixels(window, &w, &h);
   return {w, h};
 }
 
 float Window::get_ddpi() const
 {
-  float ddpi, hdpi, vdpi;
-  SDL_GetDisplayDPI(SDL_GetWindowDisplayIndex(window), &ddpi, &hdpi, &vdpi);
-  return ddpi;
+  // https://github.com/libsdl-org/SDL/blob/813c586edb9c3e83446f4cf6e801c8a62a3f9d17/docs/README-migration.md?plain=1#LL1092C122-L1092C122
+  return SDL_GetDesktopDisplayMode(SDL_GetDisplayForWindow(window))->display_scale * 96.0f;
 }
 
 std::pair<uint16_t, uint16_t> Window::get_position() const

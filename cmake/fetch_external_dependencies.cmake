@@ -13,22 +13,15 @@ else()
     set(repo_sdl "git@github.com:libsdl-org/SDL.git")
 endif()
 
-FetchContent_Declare(sdl
+FetchContent_Declare(SDL3-static
     GIT_REPOSITORY ${repo_sdl}
-    GIT_TAG release-2.26.1
+    GIT_TAG main
     GIT_SHALLOW 1
 )
-FetchContent_GetProperties(sdl)
 
-if(NOT sdl_POPULATED)
-    FetchContent_Populate(sdl)
-
-    if(APPLE)
-        set(SDL_VIDEO_METAL 1)
-    endif()
-
-	  add_subdirectory(${sdl_SOURCE_DIR} ${sdl_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
+set(SDL_SHARED OFF CACHE BOOL "SDL_SHARED")
+set(SDL_STATIC ON CACHE BOOL "SDL_STATIC")
+FetchContent_MakeAvailable(SDL3-static)
 
 # imgui
 if(EXISTS ${FETCHCONTENT_BASE_DIR}/imgui-src)
@@ -59,10 +52,6 @@ FetchContent_Declare(imguizmo
 FetchContent_MakeAvailable(imguizmo)
 
 execute_process(
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${SDL2_SOURCE_DIR}/include ${FETCHCONTENT_BASE_DIR}/SDL 
-)
-
-execute_process(
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${imgui_SOURCE_DIR} ${FETCHCONTENT_BASE_DIR}/imgui
 )
 
@@ -71,8 +60,7 @@ execute_process(
 )
 
 set(imgui_SOURCE_SYMLINK_DIR ${FETCHCONTENT_BASE_DIR}/imgui)
-set(SDL_SOURCE_SYMLINK_DIR ${FETCHCONTENT_BASE_DIR}/SDL)
-set(SDL_visualtest_INCLUDE ${SDL2_SOURCE_DIR}/visualtest/include)
+# set(SDL_visualtest_INCLUDE ${SDL3_SOURCE_DIR}/visualtest/include)
 
 file(GLOB imguizmo_SOURCES
     "${imguizmo_SOURCE_DIR}/*.h"
@@ -86,7 +74,7 @@ set(imgui_SOURCES
     ${imgui_SOURCE_SYMLINK_DIR}/imgui_tables.cpp
     ${imgui_SOURCE_SYMLINK_DIR}/imgui_widgets.cpp
     ${imgui_SOURCE_SYMLINK_DIR}/misc/cpp/imgui_stdlib.cpp
-    ${imgui_SOURCE_SYMLINK_DIR}/backends/imgui_impl_sdl.cpp
+    ${imgui_SOURCE_SYMLINK_DIR}/backends/imgui_impl_sdl3.cpp
     # ${imgui_color_text_edit_SOURCE_DIR}/TextEditor.cpp
 )
 
@@ -97,7 +85,7 @@ set(imgui_HEADERS
     ${imgui_SOURCE_SYMLINK_DIR}/imstb_truetype.h
     ${imgui_SOURCE_SYMLINK_DIR}/imgui_internal.h
     ${imgui_SOURCE_SYMLINK_DIR}/imstb_textedit.h
-    ${imgui_SOURCE_SYMLINK_DIR}/backends/imgui_impl_sdl.h
+    ${imgui_SOURCE_SYMLINK_DIR}/backends/imgui_impl_sdl3.h
     ${imgui_SOURCE_SYMLINK_DIR}/misc/cpp/imgui_stdlib.h
     # ${imgui_color_text_edit_SOURCE_DIR}/TextEditor.h
 )
@@ -106,12 +94,13 @@ add_library(ImGui STATIC ${imgui_SOURCES} ${imguizmo_SOURCES})
 
 target_link_libraries(ImGui
     PUBLIC
-    SDL2-static
+    SDL3-static
 )
 
 target_include_directories(ImGui
     PUBLIC
     $<BUILD_INTERFACE:${imgui_SOURCE_SYMLINK_DIR}>
+    $<BUILD_INTERFACE:${FETCHCONTENT_BASE_DIR}/sdl3-static-src/include>
 )
 
 # spdlog

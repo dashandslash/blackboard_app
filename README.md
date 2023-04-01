@@ -1,6 +1,6 @@
 # blackboard_app
 
-Blackboard App is a combination of SDL2, BGFX and IMGUI as base to create a desktop application (potentially also WebAssembly) with a user inteterface and a gpu rendering context.
+Blackboard App is a combination of SDL3, BGFX and IMGUI as base to create a desktop application (potentially also WebAssembly) with a user inteterface and a gpu rendering context.
 
 Few steps are needed to create a new project using this repository as template:
 

@@ -7,9 +7,9 @@
 #include "resources.h"
 #include "window.h"
 
-#include <SDL/SDL.h>
+#include <SDL3/SDL.h>
 #include <bgfx/bgfx.h>
-#include <imgui/backends/imgui_impl_sdl.h>
+#include <imgui/backends/imgui_impl_sdl3.h>
 #include <imgui/imgui_internal.h>
 #include <imguizmo/imguizmo.h>
 
@@ -31,10 +31,7 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
   logger::init();
   logger::logger->info("App constructor");
 
-  //Make process DPI aware on Windows
-  SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2");
-  SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0)
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD) != 0)
   {
     logger::logger->error(SDL_GetError());
   }
@@ -55,13 +52,13 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
   {
     case renderer::Api::METAL:
     {
-      ImGui_ImplSDL2_InitForMetal(main_window.window);
+      ImGui_ImplSDL3_InitForMetal(main_window.window);
       SDL_SetHint(SDL_HINT_RENDER_DRIVER, "metal");
     }
     break;
     case renderer::Api::D3D11:
     {
-      ImGui_ImplSDL2_InitForD3D(main_window.window);
+      ImGui_ImplSDL3_InitForD3D(main_window.window);
       SDL_SetHint(SDL_HINT_RENDER_DRIVER, "direct3d");
     }
     break;
@@ -92,14 +89,14 @@ void App::run()
     {
       while (main_window.window != nullptr && SDL_PollEvent(&event))
       {
-        ImGui_ImplSDL2_ProcessEvent(&event);
+        ImGui_ImplSDL3_ProcessEvent(&event);
 
-        if (event.type == SDL_QUIT)
+        if (event.type == SDL_EVENT_QUIT)
           running = false;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
+        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&
             event.window.windowID == SDL_GetWindowID(main_window.window))
           running = false;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
+        if (event.type == SDL_EVENT_WINDOW_RESIZED)
         {
           const auto width = event.window.data1;
           const auto height = event.window.data2;
@@ -112,7 +109,7 @@ void App::run()
       }
 
       renderer::ImGui_Impl_sdl_bgfx_NewFrame();
-      ImGui_ImplSDL2_NewFrame();
+      ImGui_ImplSDL3_NewFrame();
       ImGui::NewFrame();
       ImGuizmo::BeginFrame();
 
@@ -147,7 +144,7 @@ App::~App()
   {
     ImGui::SaveIniSettingsToDisk((resources::path() / "imgui.ini").string().c_str());
 
-    ImGui_ImplSDL2_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
     renderer::ImGui_Impl_sdl_bgfx_Shutdown();
 
     ImGui::DestroyContext();

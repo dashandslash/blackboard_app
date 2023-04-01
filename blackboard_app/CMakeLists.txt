@@ -10,7 +10,7 @@ add_library(blackboard::app ALIAS ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-    SDL2-static
+    SDL3-static
     bgfx
     bx
     glm

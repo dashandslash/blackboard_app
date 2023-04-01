@@ -3,11 +3,12 @@
 #include "platform/imgui_impl_sdl_bgfx.h"
 #include "window.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_syswm.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
-#include <imgui/backends/imgui_impl_sdl.h>
+#include <imgui/backends/imgui_impl_sdl3.h>
+#include <blackboard_app/logger.h>
 
 #include <iostream>
 #include <utility>
@@ -17,13 +18,12 @@ namespace renderer {
 
 bool init(Window &window, Api &renderer_api, const uint16_t width, const uint16_t height)
 {
-  //    SDL_SysWMinfo wmi;
-  //    SDL_VERSION(&wmi.version);
-  //    if (!SDL_GetWindowWMInfo(window.window, &wmi))
-  //    {
-  //        std::cout << "SDL_SysWMinfo could not be retrieved. SDL_Error: " <<
-  //        SDL_GetError() << std::endl; return false;
-  //    }
+      SDL_SysWMinfo wmi;
+      if (SDL_GetWindowWMInfo(window.window, &wmi, SDL_SYSWM_CURRENT_VERSION) != 0)
+      {
+          logger::logger->error(SDL_GetError());
+          return false;
+      }
   bgfx::Init bgfx_init;
   bgfx::renderFrame();    // single threaded mode
   switch (renderer_api)
