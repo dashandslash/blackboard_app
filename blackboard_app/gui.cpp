@@ -164,7 +164,7 @@ void load_font(const std::filesystem::path &path, const float size, const float 
   {
     return;
   }
-  float ratio{ddpi / 96.f};
+  float ratio{ddpi / STANDARD_DPI};
   io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * ratio, &font_config);
   // setup default font
   if (set_as_default)

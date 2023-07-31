@@ -14,6 +14,8 @@ struct State;
 
 namespace gui {
 
+constexpr float STANDARD_DPI = 96.0f;
+
 void init();
 
 bool isInit();

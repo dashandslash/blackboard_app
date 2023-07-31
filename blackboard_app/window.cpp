@@ -1,5 +1,6 @@
 #include "window.h"
 
+#include "gui.h"
 #include "logger.h"
 
 #include <SDL3/SDL.h>
@@ -19,7 +20,7 @@ Window::~Window()
 
 void Window::init_platform_window()
 {
-  window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
   SDL_SetWindowFullscreen(window, static_cast<SDL_bool>(fullscreen));
 
@@ -35,10 +36,11 @@ std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const
   return {w, h};
 }
 
-float Window::get_ddpi() const
+float Window::effective_display_resolution() const
 {
-  // https://github.com/libsdl-org/SDL/blob/813c586edb9c3e83446f4cf6e801c8a62a3f9d17/docs/README-migration.md?plain=1#LL1092C122-L1092C122
-  return SDL_GetDesktopDisplayMode(SDL_GetDisplayForWindow(window))->display_scale * 96.0f;
+  const auto pixel_density = SDL_GetWindowPixelDensity(window);
+  const auto display_scale = SDL_GetWindowDisplayScale(window);
+  return pixel_density * display_scale * gui::STANDARD_DPI;
 }
 
 std::pair<uint16_t, uint16_t> Window::get_position() const
