@@ -33,7 +33,7 @@ class App
   }
 
   bool running{true};
-  Window &main_window;
+  std::unique_ptr<Window> main_window;
 
   protected:
   uint32_t m_update_rate{16};
