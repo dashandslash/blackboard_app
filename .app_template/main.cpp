@@ -12,7 +12,7 @@ blackboard::app::App *app_ptr;
 void init()
 {
   blackboard::app::gui::set_blackboard_theme();
-  const auto dpi{app_ptr->main_window.get_ddpi()};
+  const auto dpi{app_ptr->main_window->effective_display_resolution()};
   blackboard::app::gui::load_font(blackboard::app::resources::path() / "assets/fonts/Inter/Inter-Light.otf", 12.0f,
                                   dpi);
 }
