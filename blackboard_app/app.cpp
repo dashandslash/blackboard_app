@@ -9,9 +9,10 @@
 
 #include <SDL3/SDL.h>
 #include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
 #include <imgui/backends/imgui_impl_sdl3.h>
 #include <imgui/imgui_internal.h>
-#include <imguizmo/imguizmo.h>
+#include <imguizmo/ImGuizmo.h>
 
 #include <iostream>
 
@@ -62,7 +63,19 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
       SDL_SetHint(SDL_HINT_RENDER_DRIVER, "direct3d");
     }
     break;
-    default:
+    case renderer::Api::VULKAN:
+    {
+      ImGui_ImplSDL3_InitForVulkan(main_window->window);
+    }
+    break;
+    case renderer::Api::OPENGL:
+    {
+      ImGui_ImplSDL3_InitForVulkan(main_window->window);
+      SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+    }
+    break;
+    case renderer::Api::NONE:
+      logger::logger->info("Render context not initialized");
       break;
   }
 

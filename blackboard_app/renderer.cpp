@@ -3,12 +3,12 @@
 #include "platform/imgui_impl_sdl_bgfx.h"
 #include "window.h"
 
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_syswm.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
-#include <imgui/backends/imgui_impl_sdl3.h>
 #include <blackboard_app/logger.h>
+#include <imgui/backends/imgui_impl_sdl3.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_syswm.h>
 
 #include <iostream>
 #include <utility>
@@ -47,6 +47,11 @@ bool init(Window &window, Api &renderer_api, const uint16_t width, const uint16_
   bgfx_init.resolution.numBackBuffers = 1;
   bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4;
   bgfx_init.platformData.nwh = renderer::native_window_handle(window.window);
+  auto videodriver = std::string(SDL_GetCurrentVideoDriver());
+  #ifdef SDL_ENABLE_SYSWM_X11
+    bgfx_init.platformData.ndt = wmi.info.x11.display;
+    bgfx_init.platformData.nwh = (void *)(uintptr_t)wmi.info.x11.window;
+  #endif
   bgfx::init(bgfx_init);
 
   bgfx::setDebug(BGFX_DEBUG_TEXT);
@@ -61,7 +66,14 @@ bool init(Window &window, Api &renderer_api, const uint16_t width, const uint16_
     case bgfx::RendererType::Metal:
       renderer_api = Api::METAL;
       break;
+    case bgfx::RendererType::Vulkan:
+      renderer_api = Api::VULKAN;
+      break;
+    case bgfx::RendererType::OpenGL:
+      renderer_api = Api::OPENGL;
+      break;
     default:
+      renderer_api = Api::NONE;
       break;
   }
 

@@ -34,10 +34,17 @@ function(copy_shaderc_binary output_path)
         set(shaderc_file shaderc)
         set(shaderc_output_path ${output_path}"/../Resources/tools/shaderc/shaderc")
         set(shaders_output_path ${output_path}"/../Resources/assets/shaders")
-    else()
+        set(shaderc_file_path ${blackboard_app_gfx_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${shaderc_file})
+    elseif(WIN32)
         set(shaderc_file shaderc.exe)
         set(shaderc_output_path ${output_path}"/Resources/tools/shaderc/shaderc.exe")
         set(shaders_output_path ${output_path}"/Resources/assets/shaders")
+        set(shaderc_file_path ${blackboard_app_gfx_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${shaderc_file})
+    elseif(LINUX)
+        set(shaderc_file shaderc)
+        set(shaderc_output_path ${output_path}"/Resources/tools/shaderc/shaderc")
+        set(shaders_output_path ${output_path}"/Resources/assets/shaders")
+        set(shaderc_file_path ${blackboard_app_gfx_BINARY_DIR}/${shaderc_file})
     endif()
 
     add_custom_command(TARGET ${PROJECT_NAME}
@@ -47,8 +54,8 @@ function(copy_shaderc_binary output_path)
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${bgfx_cmake_SOURCE_DIR}/bgfx/src/bgfx_shader.sh ${shaders_output_path}/bgfx_shader.sh
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${bgfx_cmake_SOURCE_DIR}/bgfx/examples/common/shaderlib.sh ${shaders_output_path}/common/shaderlib.sh
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${bgfx_cmake_SOURCE_DIR}/bgfx/examples/common/common.sh ${shaders_output_path}/common/common.sh
-        
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${blackboard_app_gfx_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${shaderc_file} ${shaderc_output_path}
+
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${shaderc_file_path} ${shaderc_output_path}
     )
 endfunction()
 

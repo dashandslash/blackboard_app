@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(APP_TEMPLATE)
+project(APP_TEMPLATE C CXX)
 
 file(GLOB_RECURSE SOURCES ./**.cpp ./**.c)
 file(GLOB_RECURSE HEADERS ./**.hpp ./**.h)
@@ -18,6 +18,8 @@ elseif(APPLE)
         MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
 )
+elseif(LINUX)
+    add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 endif()
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC cxx_std_20)

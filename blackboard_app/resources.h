@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 
 #include <filesystem>
+#include <string.h>
 
 namespace blackboard::app::resources {
 

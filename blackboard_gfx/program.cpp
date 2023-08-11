@@ -23,6 +23,11 @@ constexpr auto shader_platform_flags = " --platform windows";
 constexpr auto shader_fragment_program_flags = " -p ps_5_0";
 constexpr auto shader_vertex_program_flags = " -p vs_5_0";
 constexpr auto shaderc_binary = "tools/shaderc/shaderc.exe";
+#elif __linux__
+constexpr auto shader_platform_flags = " --platform linux";
+constexpr auto shader_fragment_program_flags = " -p spirv";
+constexpr auto shader_vertex_program_flags = " -p spirv";
+constexpr auto shaderc_binary = "tools/shaderc/shaderc.exe";
 #endif
 
 #ifdef __APPLE__
