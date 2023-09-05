@@ -6,9 +6,9 @@ set(FETCHCONTENT_QUIET off)
 set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/_external)
 
 # SDL
-if(EXISTS ${FETCHCONTENT_BASE_DIR}/sdl-src)
-    set(repo_sdl "file://${FETCHCONTENT_BASE_DIR}/sdl-src")
-    set(FETCHCONTENT_SOURCE_DIR_SDL ${FETCHCONTENT_BASE_DIR}/sdl-src)
+if(EXISTS ${FETCHCONTENT_BASE_DIR}/sdl-static-src)
+    set(repo_sdl "file://${FETCHCONTENT_BASE_DIR}/sdl-static-src")
+    set(FETCHCONTENT_SOURCE_DIR_SDL ${FETCHCONTENT_BASE_DIR}/sdl-static-src)
 else()
     set(repo_sdl "git@github.com:libsdl-org/SDL.git")
 endif()
@@ -145,13 +145,14 @@ endif()
 FetchContent_Declare(
     bgfx_cmake
     GIT_REPOSITORY ${repo_bgfx_cmake}
-    GIT_TAG v1.118.8398-377
+    GIT_TAG v1.122.8572-455
     GIT_SHALLOW 1
 )
 FetchContent_GetProperties(bgfx_cmake)
 if(NOT bgfx_cmake_POPULATED)
     FetchContent_Populate(bgfx_cmake)
-    set( BGFX_BUILD_TOOLS OFF CACHE INTERNAL "")
+    set( BGFX_BUILD_TOOLS ON CACHE INTERNAL "")
+    set( BGFX_BUILD_TOOLS_SHADER ON CACHE INTERNAL "")
     set( BGFX_BUILD_EXAMPLES  OFF CACHE INTERNAL "" )
     set( BGFX_CUSTOM_TARGETS  OFF CACHE INTERNAL "" )
     add_subdirectory(${bgfx_cmake_SOURCE_DIR} ${bgfx_cmake_BINARY_DIR} EXCLUDE_FROM_ALL)
