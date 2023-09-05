@@ -27,7 +27,7 @@ constexpr auto shaderc_binary = "tools/shaderc/shaderc.exe";
 constexpr auto shader_platform_flags = " --platform linux";
 constexpr auto shader_fragment_program_flags = " -p spirv";
 constexpr auto shader_vertex_program_flags = " -p spirv";
-constexpr auto shaderc_binary = "tools/shaderc/shaderc.exe";
+constexpr auto shaderc_binary = "tools/shaderc/shaderc";
 #endif
 
 #ifdef __APPLE__
@@ -65,7 +65,7 @@ int compile_program(const std::filesystem::path &file_path,
     cmd.append(" -o " + file_path.string() + shader_bin_extension);    // output file
     cmd.append(
       " -i " +
-      blackboard::app::resources::path().append("shaders/common").string());    // include path
+      blackboard::app::resources::path().append("assets/shaders/common").string());    // include path
     cmd.append(blackboard::gfx::Program::TypeFlag[type]);    // shader type
     cmd.append(shader_platform_flags);    // platform flags
     switch (type)
