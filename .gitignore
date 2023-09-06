@@ -9,6 +9,4 @@
 .clang-format
 _external
 _build*/
-
-/blackboard/.external
-/blackboard/_external
+build*/
