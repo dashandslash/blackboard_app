@@ -153,7 +153,7 @@ void App::run()
 
 App::~App()
 {
-  if (blackboard::app::gui::isInit())
+  if (blackboard::gui::isInit())
   {
     ImGui::SaveIniSettingsToDisk((resources::path() / "imgui.ini").string().c_str());
 

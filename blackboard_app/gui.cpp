@@ -4,7 +4,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
-namespace blackboard::app::gui {
+namespace blackboard::gui {
 
 void init()
 {
@@ -35,6 +35,61 @@ void init()
 bool isInit()
 {
   return ImGui::GetCurrentContext();
+}
+
+void set_blender_theme()
+{
+  if (!isInit())
+    return;
+
+  ImGui::StyleColorsDark();
+
+  auto &style = ImGui::GetStyle();
+  auto colors = style.Colors;
+  colors[ImGuiCol_Text] = {0.84f, 0.84f, 0.84f, 1.00f};
+  colors[ImGuiCol_WindowBg] = {0.22f, 0.22f, 0.22f, 1.00f};
+  colors[ImGuiCol_ChildBg] = {0.19f, 0.19f, 0.19f, 1.00f};
+  colors[ImGuiCol_PopupBg] = {0.09f, 0.09f, 0.09f, 1.00f};
+  colors[ImGuiCol_Border] = {0.17f, 0.17f, 0.17f, 1.00f};
+  colors[ImGuiCol_BorderShadow] = {0.10f, 0.10f, 0.10f, 0.00f};
+  colors[ImGuiCol_FrameBg] = {0.33f, 0.33f, 0.33f, 1.00f};
+  colors[ImGuiCol_FrameBgHovered] = {0.47f, 0.47f, 0.47f, 1.00f};
+  colors[ImGuiCol_FrameBgActive] = {0.16f, 0.16f, 0.16f, 1.00f};
+  colors[ImGuiCol_TitleBg] = {0.11f, 0.11f, 0.11f, 1.00f};
+  colors[ImGuiCol_TitleBgActive] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_MenuBarBg] = {0.11f, 0.11f, 0.11f, 1.00f};
+  colors[ImGuiCol_ScrollbarGrab] = {0.33f, 0.33f, 0.33f, 1.00f};
+  colors[ImGuiCol_ScrollbarGrabHovered] = {0.33f, 0.33f, 0.33f, 1.00f};
+  colors[ImGuiCol_ScrollbarGrabActive] = {0.35f, 0.35f, 0.35f, 1.00f};
+  colors[ImGuiCol_CheckMark] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_SliderGrab] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_SliderGrabActive] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_Button] = {0.33f, 0.33f, 0.33f, 1.00f};
+  colors[ImGuiCol_ButtonHovered] = {0.40f, 0.40f, 0.40f, 1.00f};
+  colors[ImGuiCol_ButtonActive] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_Header] = {0.27f, 0.27f, 0.27f, 1.00f};
+  colors[ImGuiCol_HeaderHovered] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_HeaderActive] = {0.27f, 0.27f, 0.27f, 1.00f};
+  colors[ImGuiCol_Separator] = {0.18f, 0.18f, 0.18f, 1.00f};
+  colors[ImGuiCol_SeparatorHovered] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_SeparatorActive] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_ResizeGrip] = {0.54f, 0.54f, 0.54f, 1.00f};
+  colors[ImGuiCol_ResizeGripHovered] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_ResizeGripActive] = {0.19f, 0.39f, 0.69f, 1.00f};
+  colors[ImGuiCol_Tab] = {0.11f, 0.11f, 0.11f, 1.00f};
+  colors[ImGuiCol_TabHovered] = {0.14f, 0.14f, 0.14f, 1.00f};
+  colors[ImGuiCol_TabActive] = {0.19f, 0.19f, 0.19f, 1.00f};
+  colors[ImGuiCol_PlotHistogram] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_PlotHistogramHovered] = {0.20f, 0.39f, 0.69f, 1.00f};
+  colors[ImGuiCol_TextSelectedBg] = {0.28f, 0.45f, 0.70f, 1.00f};
+  colors[ImGuiCol_NavHighlight] = {0.28f, 0.45f, 0.70f, 1.00f};
+  style.WindowPadding = {12.00f, 8.00f};
+  style.ItemSpacing = {7.00f, 3.00f};
+  style.GrabMinSize = 20.00f;
+  style.WindowRounding = 8.00f;
+  style.FrameBorderSize = 0.00f;
+  style.FrameRounding = 4.00f;
+  style.GrabRounding = 12.00f;
 }
 
 void set_blackboard_theme()
@@ -165,7 +220,8 @@ void load_font(const std::filesystem::path &path, const float size, const float 
     return;
   }
   float ratio{ddpi / STANDARD_DPI};
-  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size * ratio, &font_config);
+  io.Fonts->AddFontFromFileTTF(path.string().c_str(), size, &font_config);
+  io.Fonts->Fonts.back()->Scale = ratio;
   // setup default font
   if (set_as_default)
   {
