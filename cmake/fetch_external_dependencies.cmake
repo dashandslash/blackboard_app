@@ -6,9 +6,9 @@ set(FETCHCONTENT_QUIET off)
 set(FETCHCONTENT_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/_external)
 
 # SDL
-if(EXISTS ${FETCHCONTENT_BASE_DIR}/sdl-static-src)
+if(EXISTS ${FETCHCONTENT_BASE_DIR}"/sdl-static-src")
     set(repo_sdl "file://${FETCHCONTENT_BASE_DIR}/sdl-static-src")
-    set(FETCHCONTENT_SOURCE_DIR_SDL ${FETCHCONTENT_BASE_DIR}/sdl-static-src)
+    set(FETCHCONTENT_SOURCE_DIR_SDL ${FETCHCONTENT_BASE_DIR}"/sdl-static-src")
 else()
     set(repo_sdl "git@github.com:libsdl-org/SDL.git")
 endif()
