@@ -16,8 +16,7 @@
 #include <vector>
 
 // Data
-namespace blackboard::app {
-namespace renderer {
+namespace blackboard::renderer {
 
 static uint8_t main_view_id{255};
 static bool is_init{false};
@@ -358,5 +357,4 @@ void ImGui_Impl_sdl_bgfx_NewFrame()
   }
 }
 
-}    // namespace renderer
-}    // namespace blackboard::app
+}    // namespace blackboard::renderer

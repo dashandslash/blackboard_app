@@ -4,8 +4,7 @@
 
 struct SDL_Window;
 
-namespace blackboard::app {
-namespace renderer {
+namespace blackboard::renderer {
 void ImGui_Impl_sdl_bgfx_Init(int view);
 void ImGui_Impl_sdl_bgfx_Shutdown();
 void ImGui_Impl_sdl_bgfx_NewFrame();
@@ -17,5 +16,4 @@ void ImGui_Impl_sdl_bgfx_InvalidateDeviceObjects();
 bool ImGui_Impl_sdl_bgfx_CreateDeviceObjects();
 
 void *native_window_handle(void *window);
-}    // namespace renderer
-}    // namespace blackboard::app
+}    // namespace blackboard::renderer

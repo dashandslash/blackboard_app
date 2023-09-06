@@ -13,15 +13,14 @@
 #include <iostream>
 #include <utility>
 
-namespace blackboard::app {
-namespace renderer {
+namespace blackboard::renderer {
 
-bool init(Window &window, Api &renderer_api, const uint16_t width, const uint16_t height)
+bool init(app::Window &window, Api &renderer_api, const uint16_t width, const uint16_t height)
 {
       SDL_SysWMinfo wmi;
       if (SDL_GetWindowWMInfo(window.window, &wmi, SDL_SYSWM_CURRENT_VERSION) != 0)
       {
-          logger::logger->error(SDL_GetError());
+          blackboard::app::logger::logger->error(SDL_GetError());
           return false;
       }
   bgfx::Init bgfx_init;
@@ -79,5 +78,4 @@ bool init(Window &window, Api &renderer_api, const uint16_t width, const uint16_
 
   return true;
 }
-}    // namespace renderer
-}    // namespace blackboard::app
+}    // namespace blackboard::renderer

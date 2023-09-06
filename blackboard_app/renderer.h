@@ -4,10 +4,10 @@
 struct SDL_Window;
 
 namespace blackboard::app {
+  struct Window;
+}
 
-struct Window;
-
-namespace renderer {
+namespace blackboard::renderer {
 
 enum class Api : uint8_t
 {
@@ -20,7 +20,6 @@ enum class Api : uint8_t
   AUTO
 };
 
-bool init(Window &window, Api &, const uint16_t width, const uint16_t height);
+bool init(app::Window &window, Api &, const uint16_t width, const uint16_t height);
 
-}    // namespace renderer
-}    // namespace blackboard::app
+}    // namespace blackboard::renderer

@@ -23,10 +23,6 @@ void Window::init_platform_window()
   window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
   SDL_SetWindowFullscreen(window, static_cast<SDL_bool>(fullscreen));
-
-//#ifdef _WIN32
-//  SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-//#endif  // _WIN32
 }
 
 std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const
