@@ -10,7 +10,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_syswm.h>
+#include <build_config/SDL_build_config.h>
 
 #include <string>
 #include <vector>
@@ -61,37 +61,14 @@ enum class BgfxTextureFlags : uint32_t
   All = Opaque | PointSampler,
 };
 
-void *native_window_handle(void *window)
+void *native_window_handle(ImGuiViewport* viewport, SDL_Window* window)
 {
-  SDL_Window *sdl_window = (SDL_Window *)window;
-  SDL_SysWMinfo wmi;
-  int ok = SDL_GetWindowWMInfo(sdl_window, &wmi, SDL_SYSWM_CURRENT_VERSION);
-  if (ok != 0) {
-    const char* err = SDL_GetError();
-    return nullptr;
-  }
-#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
-#if ENTRY_CONFIG_USE_WAYLAND
-  wl_egl_window *win_impl = (wl_egl_window *)SDL_GetWindowData(sdl_window, "wl_egl_window");
-  if (!win_impl)
-  {
-    int width, height;
-    SDL_GetWindowSize(sdl_window, &width, &height);
-    struct wl_surface *surface = wmi.info.wl.surface;
-    if (!surface)
-      return nullptr;
-    win_impl = wl_egl_window_create(surface, width, height);
-    SDL_SetWindowData(sdl_window, "wl_egl_window", win_impl);
-  }
-  return (void *)(uintptr_t)win_impl;
-#else
-  return (void *)wmi.info.x11.window;
+#if defined(__WIN32__) && !defined(__WINRT__)
+  return SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.win32.hwnd", NULL);
+#elif defined(__APPLE__) && defined(SDL_VIDEO_DRIVER_COCOA)
+  return SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.cocoa.window", NULL);
 #endif
-#elif BX_PLATFORM_OSX
-  return wmi.info.cocoa.window;
-#elif BX_PLATFORM_WINDOWS
-  return wmi.info.win.window;
-#endif    // BX_PLATFORM_
+  return nullptr;
 }
 
 struct imgui_viewport_data
@@ -112,7 +89,7 @@ static void ImguiBgfxOnCreateWindow(ImGuiViewport *viewport)
   data->height = bx::max<uint16_t>((uint16_t)viewport->Size.y, 1);
   // Create frame buffer
   data->frameBufferHandle =
-    bgfx::createFrameBuffer(native_window_handle((SDL_Window *)viewport->PlatformHandle),
+    bgfx::createFrameBuffer(native_window_handle(viewport, (SDL_Window *)viewport->PlatformHandle),
                             data->width * viewport->DrawData->FramebufferScale.x,
                             data->height * viewport->DrawData->FramebufferScale.y);
   // Set frame buffer

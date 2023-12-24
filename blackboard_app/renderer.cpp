@@ -8,7 +8,7 @@
 #include <blackboard_app/logger.h>
 #include <imgui/backends/imgui_impl_sdl3.h>
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_syswm.h>
+#include <build_config/SDL_build_config.h>
 
 #include <iostream>
 #include <utility>
@@ -17,12 +17,18 @@ namespace blackboard::renderer {
 
 bool init(app::Window &window, Api &renderer_api, const uint16_t width, const uint16_t height)
 {
-      SDL_SysWMinfo wmi;
-      if (SDL_GetWindowWMInfo(window.window, &wmi, SDL_SYSWM_CURRENT_VERSION) != 0)
-      {
-          blackboard::app::logger::logger->error(SDL_GetError());
-          return false;
-      }
+  void* window_handle{nullptr};
+#if defined(__WIN32__) && !defined(__WINRT__)
+  window_handle = SDL_GetProperty(SDL_GetWindowProperties(window.window), "SDL.window.win32.hwnd");
+#elif defined(__APPLE__) && defined(SDL_VIDEO_DRIVER_COCOA)
+  window_handle = SDL_GetProperty(SDL_GetWindowProperties(window.window), "SDL.window.cocoa.window", NULL);
+#endif
+  if(!window_handle)
+  {
+    blackboard::app::logger::logger->error(SDL_GetError());
+    return false;
+  }
+
   bgfx::Init bgfx_init;
   bgfx::renderFrame();    // single threaded mode
   switch (renderer_api)
@@ -45,7 +51,7 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
   bgfx_init.resolution.height = drawable_height;
   bgfx_init.resolution.numBackBuffers = 1;
   bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4;
-  bgfx_init.platformData.nwh = renderer::native_window_handle(window.window);
+  bgfx_init.platformData.nwh = renderer::native_window_handle(ImGui::GetMainViewport(), window.window);
   auto videodriver = std::string(SDL_GetCurrentVideoDriver());
   #ifdef SDL_ENABLE_SYSWM_X11
     bgfx_init.platformData.ndt = wmi.info.x11.display;
