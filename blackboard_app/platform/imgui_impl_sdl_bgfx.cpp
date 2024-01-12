@@ -8,7 +8,7 @@
 #include <bx/math.h>
 #include <bx/timer.h>
 #include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
+// #include <imgui/imgui_internal.h>
 #include <SDL3/SDL.h>
 #include <build_config/SDL_build_config.h>
 
@@ -61,14 +61,17 @@ enum class BgfxTextureFlags : uint32_t
   All = Opaque | PointSampler,
 };
 
-void *native_window_handle(ImGuiViewport* viewport, SDL_Window* window)
+unsigned long native_window_handle(ImGuiViewport* viewport, SDL_Window* window)
 {
 #if defined(__WIN32__) && !defined(__WINRT__)
   return SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.win32.hwnd", NULL);
 #elif defined(__APPLE__) && defined(SDL_VIDEO_DRIVER_COCOA)
   return SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.cocoa.window", NULL);
+#elif defined(__LINUX__) && defined(SDL_VIDEO_DRIVER_X11)
+  auto handle = SDL_GetNumberProperty(SDL_GetWindowProperties(window), "SDL.window.x11.window", 0);
+  return handle;
 #endif
-  return nullptr;
+  return 0;
 }
 
 struct imgui_viewport_data
@@ -80,7 +83,7 @@ struct imgui_viewport_data
 };
 
 static void ImguiBgfxOnCreateWindow(ImGuiViewport *viewport)
-{
+{ 
   auto data = new imgui_viewport_data();
   viewport->RendererUserData = data;
   // Setup view id and size
@@ -89,7 +92,7 @@ static void ImguiBgfxOnCreateWindow(ImGuiViewport *viewport)
   data->height = bx::max<uint16_t>((uint16_t)viewport->Size.y, 1);
   // Create frame buffer
   data->frameBufferHandle =
-    bgfx::createFrameBuffer(native_window_handle(viewport, (SDL_Window *)viewport->PlatformHandle),
+    bgfx::createFrameBuffer((void*)native_window_handle(viewport, (SDL_Window *)viewport->PlatformHandle),
                             data->width * viewport->DrawData->FramebufferScale.x,
                             data->height * viewport->DrawData->FramebufferScale.y);
   // Set frame buffer
@@ -244,10 +247,10 @@ void ImGui_Impl_sdl_bgfx_Render(const bgfx::ViewId view_id, ImDrawData *draw_dat
         if (clipRect.x < framebuffer_size.x && clipRect.y < framebuffer_size.y && clipRect.z >= 0.0f &&
             clipRect.w >= 0.0f)
         {
-          const uint16_t x(bx::max(cmd->ClipRect.x - clip_position.x, 0.0f));
-          const uint16_t y(bx::max(cmd->ClipRect.y - clip_position.y, 0.0f));
-          const uint16_t width(bx::min(cmd->ClipRect.z - clip_position.x - x, 65535.0f));
-          const uint16_t height(bx::min(cmd->ClipRect.w - clip_position.y - y, 65535.0f));
+          const uint16_t x = (uint16_t)bx::max<float>(cmd->ClipRect.x - clip_position.x, 0.0f);
+          const uint16_t y(bx::max<float>(cmd->ClipRect.y - clip_position.y, 0.0f));
+          const uint16_t width(bx::min<float>(cmd->ClipRect.z - clip_position.x - x, 65535.0f));
+          const uint16_t height(bx::min<float>(cmd->ClipRect.w - clip_position.y - y, 65535.0f));
           encoder->setScissor(x * clip_scale.x, y * clip_scale.x, width * clip_scale.x,
                               height * clip_scale.x);
 

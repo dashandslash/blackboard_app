@@ -6,9 +6,9 @@ file(GLOB_RECURSE SOURCES ./**.cpp ./**.c)
 file(GLOB_RECURSE HEADERS ./**.hpp ./**.h)
 file(GLOB_RECURSE ASSETS ./assets/*)
 
-if(WIN32)
+if(WINDOWS)
     add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-elseif(APPLE)
+elseif(MACOS)
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES} ${HEADERS})
     set_target_properties(${PROJECT_NAME} PROPERTIES
         BUNDLE True
@@ -35,10 +35,10 @@ target_include_directories(${PROJECT_NAME}
     ${blackboard_app_SOURCE_DIR}
 )
 
-if(WIN32)
+if(WINDOWS)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-    ${bgfx_cmake_SOURCE_DIR}/bx/include/compat/msvc
+    ${bgfx_SOURCE_DIR}/bx/include/compat/msvc
 )
 endif()
 
@@ -53,7 +53,7 @@ target_compile_definitions(${PROJECT_NAME}
 
 add_dependencies(${PROJECT_NAME} "${PROJECT_NAME}_copy_assets")
 
-if(APPLE)
+if(MACOS)
     add_custom_target("${PROJECT_NAME}_copy_assets" ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_LIST_DIR}/assets"

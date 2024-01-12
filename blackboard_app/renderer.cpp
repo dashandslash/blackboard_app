@@ -6,9 +6,7 @@
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <blackboard_app/logger.h>
-#include <imgui/backends/imgui_impl_sdl3.h>
 #include <SDL3/SDL.h>
-#include <build_config/SDL_build_config.h>
 
 #include <iostream>
 #include <utility>
@@ -17,12 +15,9 @@ namespace blackboard::renderer {
 
 bool init(app::Window &window, Api &renderer_api, const uint16_t width, const uint16_t height)
 {
-  void* window_handle{nullptr};
-#if defined(__WIN32__) && !defined(__WINRT__)
-  window_handle = SDL_GetProperty(SDL_GetWindowProperties(window.window), "SDL.window.win32.hwnd");
-#elif defined(__APPLE__) && defined(SDL_VIDEO_DRIVER_COCOA)
-  window_handle = SDL_GetProperty(SDL_GetWindowProperties(window.window), "SDL.window.cocoa.window", NULL);
-#endif
+  ImGui_Impl_sdl_bgfx_Init(window.imgui_view_id);
+
+  auto window_handle{native_window_handle(ImGui::GetMainViewport(), window.window)};
   if(!window_handle)
   {
     blackboard::app::logger::logger->error(SDL_GetError());
@@ -39,6 +34,9 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
     case Api::D3D11:
       bgfx_init.type = bgfx::RendererType::Direct3D11;    // auto choose renderer
       break;
+    case Api::VULKAN:
+      bgfx_init.type = bgfx::RendererType::Vulkan;    // auto choose renderer
+      break;
     case Api::WEBGL:
       bgfx_init.type = bgfx::RendererType::OpenGL;    // auto choose renderer
       break;
@@ -50,12 +48,10 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
   bgfx_init.resolution.width = drawable_width;
   bgfx_init.resolution.height = drawable_height;
   bgfx_init.resolution.numBackBuffers = 1;
-  bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4;
-  bgfx_init.platformData.nwh = renderer::native_window_handle(ImGui::GetMainViewport(), window.window);
-  auto videodriver = std::string(SDL_GetCurrentVideoDriver());
-  #ifdef SDL_ENABLE_SYSWM_X11
-    bgfx_init.platformData.ndt = wmi.info.x11.display;
-    bgfx_init.platformData.nwh = (void *)(uintptr_t)wmi.info.x11.window;
+  bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4; 
+  #ifdef SDL_VIDEO_DRIVER_X11
+    bgfx_init.platformData.ndt = SDL_GetProperty(SDL_GetWindowProperties(window.window), "SDL.window.x11.display", NULL);
+    bgfx_init.platformData.nwh = (void *)window_handle;
   #endif
   bgfx::init(bgfx_init);
 

@@ -33,6 +33,8 @@ class App
     return std::chrono::duration<float>(std::chrono::steady_clock::now() - m_start_time).count();
   }
 
+  float main_window_resolution() const;
+
   bool running{true};
   std::unique_ptr<Window> main_window;
 

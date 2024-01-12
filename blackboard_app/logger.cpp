@@ -34,7 +34,7 @@ void init()
   static const std::filesystem::path filename{path() / "blackboard.log"};
 
   auto console_sink_trace = std::make_shared<spdlog::sinks::stdout_sink_mt>();
-  console_sink_trace->set_pattern("[multi_sink_example] [%^%l%$] %v");
+  console_sink_trace->set_pattern("[%^%l%$] %v");
 
   auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(filename.string().c_str(), file_size , rotating_files, true);
   spdlog::sinks_init_list sink_list = { file_sink, console_sink_trace };

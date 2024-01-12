@@ -20,9 +20,16 @@ Window::~Window()
 
 void Window::init_platform_window()
 {
-  window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-  SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-  SDL_SetWindowFullscreen(window, static_cast<SDL_bool>(fullscreen));
+  SDL_PropertiesID props = SDL_CreateProperties();
+  SDL_SetStringProperty(props, "title", title.c_str());
+  SDL_SetNumberProperty(props, "x", SDL_WINDOWPOS_CENTERED);
+  SDL_SetNumberProperty(props, "y", SDL_WINDOWPOS_CENTERED);
+  SDL_SetNumberProperty(props, "width", width);
+  SDL_SetNumberProperty(props, "height", height);
+  SDL_SetNumberProperty(props, SDL_PROPERTY_WINDOW_CREATE_VULKAN_BOOLEAN, SDL_TRUE);
+  SDL_SetNumberProperty(props, "flags", SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+  window = SDL_CreateWindowWithProperties(props);
+  SDL_DestroyProperties(props);
 }
 
 std::pair<uint16_t, uint16_t> Window::get_size_in_pixels() const

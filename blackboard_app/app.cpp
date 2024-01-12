@@ -26,28 +26,29 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
 , on_resize{[](const uint16_t width, const uint16_t height) {
   logger::logger->info("window resize function not defined");}}
 {
-  if (renderer_api == renderer::Api::NONE)
-    return;
-
   logger::init();
   logger::logger->info("App constructor");
-
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD) != 0)
+  if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
-    logger::logger->error(SDL_GetError());
+    logger::logger->error("Error initializing SDL: %s", SDL_GetError());
+    return;
   }
 
-  main_window->title = app_name;
-  main_window->width = width;
-  main_window->height = height;
-  main_window->fullscreen = fullscreen;
-
   main_window->init_platform_window();
-
   gui::init();
-
-  renderer::init(*main_window, m_renderer_api, main_window->width, main_window->height);
-  renderer::ImGui_Impl_sdl_bgfx_Init(main_window->imgui_view_id);
+  if(renderer::init(*main_window, m_renderer_api, main_window->width, main_window->height))
+  {
+    main_window->title = app_name;
+    main_window->width = width;
+    main_window->height = height;
+    main_window->fullscreen = fullscreen;
+  }
+  else
+  {
+    logger::logger->error("Renderer not initialized");
+    main_window.reset();
+    return;
+  }
 
   switch (m_renderer_api)
   {
@@ -66,6 +67,7 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
     case renderer::Api::VULKAN:
     {
       ImGui_ImplSDL3_InitForVulkan(main_window->window);
+      SDL_SetHint(SDL_HINT_RENDER_DRIVER, "vulkan");
     }
     break;
     case renderer::Api::OPENGL:
@@ -86,7 +88,7 @@ void App::run()
 {
   on_init();
 
-  if (ImGui::GetCurrentContext())
+  if (ImGui::GetCurrentContext() && main_window)
   {
     auto layout_ui = resources::path() / "imgui.ini";
     if (!std::filesystem::exists(layout_ui))
@@ -103,13 +105,13 @@ void App::run()
       while (main_window->window != nullptr && SDL_PollEvent(&event))
       {
         ImGui_ImplSDL3_ProcessEvent(&event);
+        const bool is_main_window = event.window.windowID == SDL_GetWindowID(main_window->window);
 
         if (event.type == SDL_EVENT_QUIT)
           running = false;
-        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED &&
-            event.window.windowID == SDL_GetWindowID(main_window->window))
+        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && is_main_window)
           running = false;
-        if (event.type == SDL_EVENT_WINDOW_RESIZED)
+        if (event.type == SDL_EVENT_WINDOW_RESIZED && is_main_window)
         {
           const auto width = event.window.data1;
           const auto height = event.window.data2;
@@ -168,6 +170,11 @@ App::~App()
   }
   main_window.reset();
   logger::shutdown();
+}
+
+float App::main_window_resolution() const
+{
+  return main_window ? main_window->effective_display_resolution() : 0;
 }
 
 }  // namespace blackboard::app
