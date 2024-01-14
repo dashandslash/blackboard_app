@@ -66,9 +66,9 @@ enum class BgfxTextureFlags : uint32_t
 unsigned long native_window_handle(ImGuiViewport* viewport, SDL_Window* window)
 {
 #if defined(__WIN32__) && !defined(__WINRT__)
-  return SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.win32.hwnd", NULL);
+  return (unsigned long)SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.win32.hwnd", NULL);
 #elif defined(__APPLE__) && defined(SDL_VIDEO_DRIVER_COCOA)
-  return SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.cocoa.window", NULL);
+  return (unsigned long)SDL_GetProperty(SDL_GetWindowProperties(window), "SDL.window.cocoa.window", NULL);
 #elif defined(__LINUX__) && defined(SDL_VIDEO_DRIVER_X11)
   auto handle = SDL_GetNumberProperty(SDL_GetWindowProperties(window), "SDL.window.x11.window", 0);
   return handle;
