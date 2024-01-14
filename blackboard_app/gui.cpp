@@ -6,6 +6,8 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
+#include "logger.h"
+
 namespace blackboard::gui {
 
 void init()
@@ -202,11 +204,14 @@ void set_blackboard_theme()
   style.FrameRounding = 2.0f;
 }
 
-void load_font(const std::filesystem::path &path, const float size, const float ddpi, const bool set_as_default,
+bool load_font(const std::filesystem::path &path, const float size, const float ddpi, const bool set_as_default,
                const int oversample_h, const int oversample_v, const float rasterizer_multiply)
 {
   if (!isInit())
-    return;
+  {
+    logger::logger->error("Cannot add font as the GUI not initialised");
+    return false;
+  }
 
   ImFontConfig font_config;
   font_config.RasterizerMultiply = rasterizer_multiply;
@@ -215,13 +220,18 @@ void load_font(const std::filesystem::path &path, const float size, const float 
   auto &io{ImGui::GetIO()};
   if (!std::filesystem::exists(path))
   {
-    return;
+    logger::logger->error("Font path {} does not exist.", path.string());
+    return false;
   }
   static const std::filesystem::path ttf_extension{".ttf"};
-  static const std::filesystem::path otf_extension{".0tf"};
+  static const std::filesystem::path otf_extension{".otf"};
   if (path.extension() != ttf_extension && path.extension() != otf_extension)
   {
-    return;
+    logger::logger->error("Font extension {} is not of type {} or {}}.",
+                          path.extension().string(),
+                          ttf_extension.string(),
+                          otf_extension.string());
+    return false;
   }
   float ratio{ddpi / STANDARD_DPI};
   io.Fonts->AddFontFromFileTTF(path.string().c_str(), size, &font_config);
@@ -234,6 +244,7 @@ void load_font(const std::filesystem::path &path, const float size, const float 
 #ifdef __APPLE__
   io.FontGlobalScale = 1.0f / floor(ratio);
 #endif
+  return true;
 }
 
 void dockspace()

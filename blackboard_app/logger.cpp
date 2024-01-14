@@ -9,7 +9,7 @@
 #include <filesystem>
 #include <chrono>
 
-namespace blackboard::app::logger {
+namespace blackboard::logger {
 
 std::filesystem::path path()
 {

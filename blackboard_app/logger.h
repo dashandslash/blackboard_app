@@ -3,7 +3,7 @@
 
 #include <filesystem>
 
-namespace blackboard::app::logger {
+namespace blackboard::logger {
 
 inline std::shared_ptr<spdlog::logger> logger{nullptr};
 

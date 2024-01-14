@@ -9,7 +9,7 @@
 #include <sstream>
 #include <string>
 
-namespace internal {
+namespace blackboard::internal {
 
 constexpr auto shader_bin_extension = ".bin";
 
@@ -91,12 +91,12 @@ void log_compilation_error(const std::filesystem::path &shader_file_path)
     {
         std::ostringstream sstr;
         sstr << temp_file.rdbuf();
-        blackboard::app::logger::logger->error("Error compiling shader:\n{} \n{}", shader_file_path.string(), sstr.str());
+        logger::logger->error("Error compiling shader:\n{} \n{}", shader_file_path.string(), sstr.str());
         temp_file.close();
     }
 }
 
-}    // namespace
+}    // namespace blackboard::internal
 
 namespace blackboard::gfx {
 
@@ -129,13 +129,13 @@ bool init(Program& prog, const std::filesystem::path &vsh_path, const std::files
     const auto vsh = load_program(vsh_path.string() + shader_bin_extension);
     if (!bgfx::isValid(vsh))
     {
-        app::logger::logger->error("Error loading program: {}", fsh_path.string() + shader_bin_extension);
+        logger::logger->error("Error loading program: {}", fsh_path.string() + shader_bin_extension);
         return false;
     }
     const auto fsh = load_program(fsh_path.string() + shader_bin_extension);
     if (!bgfx::isValid(fsh))
     {
-        app::logger::logger->error("Error loading program: {}", fsh_path.string() + shader_bin_extension);
+        logger::logger->error("Error loading program: {}", fsh_path.string() + shader_bin_extension);
         return false;
     }
 

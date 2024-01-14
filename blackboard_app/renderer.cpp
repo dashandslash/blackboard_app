@@ -20,7 +20,7 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
   auto window_handle{native_window_handle(ImGui::GetMainViewport(), window.window)};
   if(!window_handle)
   {
-    blackboard::app::logger::logger->error(SDL_GetError());
+    logger::logger->error(SDL_GetError());
     return false;
   }
 
