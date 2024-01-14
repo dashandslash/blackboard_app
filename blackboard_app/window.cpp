@@ -26,7 +26,6 @@ void Window::init_platform_window()
   SDL_SetNumberProperty(props, "y", SDL_WINDOWPOS_CENTERED);
   SDL_SetNumberProperty(props, "width", width);
   SDL_SetNumberProperty(props, "height", height);
-  SDL_SetNumberProperty(props, SDL_PROPERTY_WINDOW_CREATE_VULKAN_BOOLEAN, SDL_TRUE);
   SDL_SetNumberProperty(props, "flags", SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   window = SDL_CreateWindowWithProperties(props);
   SDL_DestroyProperties(props);
