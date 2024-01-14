@@ -217,7 +217,9 @@ void load_font(const std::filesystem::path &path, const float size, const float 
   {
     return;
   }
-  if (path.extension() != ".ttf" && path.extension() != ".otf")
+  static const std::filesystem::path ttf_extension{".ttf"};
+  static const std::filesystem::path otf_extension{".0tf"};
+  if (path.extension() != ttf_extension && path.extension() != otf_extension)
   {
     return;
   }
