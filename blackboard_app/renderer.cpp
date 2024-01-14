@@ -55,9 +55,9 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
   #endif
   bgfx::init(bgfx_init);
 
-  bgfx::setDebug(BGFX_DEBUG_TEXT);
-  bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x000000FF, 1.0f, 0);
-  bgfx::setViewRect(0, 0, 0, drawable_width, drawable_height);
+//  bgfx::setDebug(BGFX_DEBUG_TEXT);
+//  bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xFF0000FF, 1.0f, 0);
+//  bgfx::setViewRect(0, 0, 0, drawable_width, drawable_height);
 
   switch (bgfx::getRendererType())
   {
