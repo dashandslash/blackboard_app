@@ -1,3 +1,5 @@
+#define IMGUI_DEFINE_MATH_OPERATORS
+
 #include "imgui_impl_sdl_bgfx.h"
 
 #include "fs_ocornut_imgui.bin.h"

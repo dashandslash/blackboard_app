@@ -62,7 +62,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 # target_compile_definitions(${PROJECT_NAME} PUBLIC "BX_CONFIG_DEBUG=$<CONFIG:Debug>")
-target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_DEFINE_MATH_OPERATORS)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${HEADERS} ${SOURCES})
