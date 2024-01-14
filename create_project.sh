@@ -17,7 +17,7 @@ fi
 
 # Copy the template folder and rename APP_TEMPLATE where needed with the argument containing the project name
 platform_name=$(uname)
-cp -R .app_template/. projects/$project_name
+cp -R app_template/. projects/$project_name
 if [ $platform_name == "Darwin" ]; then
   sed -i '' "s/APP_TEMPLATE/$project_name/g" "projects/$project_name"/main.cpp
   sed -i '' "s/APP_TEMPLATE/$project_name/g" "projects/$project_name"/CMakeLists.txt

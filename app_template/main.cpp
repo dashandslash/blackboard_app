@@ -26,7 +26,7 @@ void app_update()
 int main(int argc, char *argv[])
 {
   blackboard::app::App app("APP_TEMPLATE",
-                           blackboard::app::renderer::Api::AUTO);  // autodetect renderer api
+                           blackboard::renderer::Api::AUTO);  // autodetect renderer api
   app_ptr = &app;
   app.on_update = app_update;
   app.on_init = init;
