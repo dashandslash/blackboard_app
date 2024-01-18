@@ -25,7 +25,14 @@ file(GLOB_RECURSE HEADERS ./**.hpp ./**.h)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES} ${HEADERS})
 add_library(blackboard::app ALIAS ${PROJECT_NAME})
-find_package(X11)
+# set(CMAKE_CXX_FLAGS " \
+# --bind \
+# -s TOTAL_MEMORY=67108864 \
+# -s USE_SDL=3 \
+# -s ASSERTIONS=1 \
+# -s DISABLE_EXCEPTION_CATCHING=0 \
+# -s 'EXTRA_EXPORTED_RUNTIME_METHODS=[\"writeArrayToMemory\"]' \
+# ")
 target_link_libraries(${PROJECT_NAME}
     SDL3::SDL3
     bgfx
@@ -33,6 +40,21 @@ target_link_libraries(${PROJECT_NAME}
     glm
     ImGui
     spdlog
+)
+
+add_compile_definitions("__EMSCRIPTEN__")
+target_link_options(${PROJECT_NAME} PRIVATE
+    "-sMODULARIZE=1"
+    "-sEXPORT_NAME='Main'"
+    "-sINVOKE_RUN=0"
+    "-sDISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0"
+    "-sEXPORTED_FUNCTIONS=['_main']"
+    "-sEXPORTED_RUNTIME_METHODS=['callMain', 'ccall', 'cwrap']"
+    "-sFORCE_FILESYSTEM=1"
+    "-sUSE_SDL=3"
+    "-sALLOW_MEMORY_GROWTH=1" 
+    "-sASYNCIFY"
+    "-O2"
 )
 
 target_include_directories(${PROJECT_NAME}

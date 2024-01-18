@@ -1,3 +1,5 @@
+#ifndef __EMSCRIPTEN__
+
 #include "program.h"
 
 #include <blackboard_app/resources.h>
@@ -96,6 +98,7 @@ void log_compilation_error(const std::filesystem::path &shader_file_path)
     }
 }
 
+
 }    // namespace blackboard::internal
 
 namespace blackboard::gfx {
@@ -154,3 +157,4 @@ bool init(Program& prog, const std::filesystem::path &vsh_path, const std::files
 }
 
 }    // namespace blackboard::gfx
+#endif

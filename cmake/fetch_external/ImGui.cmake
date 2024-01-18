@@ -48,13 +48,13 @@ set(imgui_HEADERS
 
 add_library(ImGui ${imgui_HEADERS} ${imgui_SOURCES} ${imguizmo_SOURCES})
 
-target_link_libraries(ImGui
-    PUBLIC
-    SDL3::SDL3
-)
+# target_link_libraries(ImGui
+#     PUBLIC
+#     SDL3::SDL3
+# )
 
 target_include_directories(ImGui
     PUBLIC
     $<BUILD_INTERFACE:${imgui_SOURCE_DIR}>
-    # $<BUILD_INTERFACE:${FETCHCONTENT_BASE_DIR}/SDL/include>
+    $<BUILD_INTERFACE:${FETCHCONTENT_BASE_DIR}/SDL/include>
 )

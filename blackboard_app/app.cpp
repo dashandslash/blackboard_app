@@ -15,8 +15,16 @@
 #include <imguizmo/ImGuizmo.h>
 
 #include <iostream>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 namespace blackboard::app {
+
+void loopFunction()
+{
+    logger::logger->info("Looping");
+}
 
 App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width, const uint16_t height,
          const bool fullscreen)
@@ -82,6 +90,7 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
   }
 
   logger::logger->info("Ending App constructor");
+  emscripten_set_main_loop(loopFunction, 0, 1);
 }
 
 void App::run()

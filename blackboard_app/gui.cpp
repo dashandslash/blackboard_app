@@ -227,7 +227,7 @@ bool load_font(const std::filesystem::path &path, const float size, const float 
   static const std::filesystem::path otf_extension{".otf"};
   if (path.extension() != ttf_extension && path.extension() != otf_extension)
   {
-    logger::logger->error("Font file extension {} is not of type {} or {}.",
+    logger::logger->error("Font file {} is not of type {} or {}.",
                           path.string(),
                           ttf_extension.string(),
                           otf_extension.string());
