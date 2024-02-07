@@ -18,6 +18,7 @@ class App
       const uint16_t height = 720u, const bool fullscreen = false);
   ~App();
   void run();
+  void loop();
   std::function<void()> on_init{};
   std::function<void()> on_update{};
   std::function<void(const uint16_t, const uint16_t)> on_resize{};

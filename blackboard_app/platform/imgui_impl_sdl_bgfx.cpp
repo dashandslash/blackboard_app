@@ -72,6 +72,10 @@ unsigned long native_window_handle(ImGuiViewport* viewport, SDL_Window* window)
 #elif defined(__LINUX__) && defined(SDL_VIDEO_DRIVER_X11)
   auto handle = SDL_GetNumberProperty(SDL_GetWindowProperties(window), "SDL.window.x11.window", 0);
   return handle;
+#elif defined(__EMSCRIPTEN__)
+  static const std::string canvas = "#canvas";
+  static const char* handle = canvas.c_str();
+  return (unsigned long)handle;
 #endif
   return 0;
 }

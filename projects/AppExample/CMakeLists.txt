@@ -29,29 +29,27 @@ elseif(EMSCRIPTEN)
     # -s DISABLE_EXCEPTION_CATCHING=0 \
     # -s 'EXTRA_EXPORTED_RUNTIME_METHODS=[\"writeArrayToMemory\"]' \
     # ")
-    set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
-
+    # set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
+	# set(CMAKE_EXECUTABLE_SUFFIX ".html")
     add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 	message(STATUS ">>>>>>> EMSCRIPTEN")
 	add_compile_definitions("__EMSCRIPTEN__")
-    set(WASM_BUILD_FLAGS "\
-    -s SINGLE_FILE=1 \
-    -s EXPORT_ES6=0 \
-    -s MODULARIZE=1 \
-    -s EXPORT_NAME=createModule \
-    -s NO_EXIT_RUNTIME=1 \
-    -s ALLOW_MEMORY_GROWTH \
-    -s ENVIRONMENT=web,worker \
-    -s INVOKE_RUN=0 \
-    -s ASSERTIONS=1 \
-    -s NO_DISABLE_EXCEPTION_CATCHING=1 \
-    -s STACK_SIZE=655360 \
-    -s INITIAL_MEMORY=52428800 \
-    -s EXPORTED_RUNTIME_METHODS=ccall,cwrap  \
-    -s EXPORTED_FUNCTIONS=${WASM_EXPORTED_FUNCTIONS} \
-    -s USE_PTHREADS \
-    -O3")
+    # set(WASM_BUILD_FLAGS "\
+    # -s SINGLE_FILE=1 \
+    # -s EXPORT_ES6=0 \
+    # -s NO_EXIT_RUNTIME=1 \
+    # -s ENVIRONMENT=web,worker \
+    # -s INVOKE_RUN=0 \
+    # -s ASSERTIONS=1 \
+    # -s NO_DISABLE_EXCEPTION_CATCHING=1 \
+    # -s STACK_SIZE=655360 \
+    # -s INITIAL_MEMORY=52428800 \
+    # -s EXPORTED_RUNTIME_METHODS=cwrap  \
+    # -s EXPORTED_FUNCTIONS=${WASM_EXPORTED_FUNCTIONS} \
+    # -s EXPORTED_FUNCTIONS=['_main'] \
+    # -s USE_PTHREADS")
+    set(WASM_BUILD_FLAGS "-pthread -sALLOW_MEMORY_GROWTH=1 -sUSE_PTHREADS -s PTHREAD_POOL_SIZE=2 -sWASM_WORKERS=1 -sASYNCIFY -s FORCE_FILESYSTEM=1 -s INITIAL_MEMORY=1024MB -sUSE_SDL=3 -sUSE_SDL_MIXER=3 -sSTACK_SIZE=8MB -s DEMANGLE_SUPPORT=1 -s GL_ENABLE_GET_PROC_ADDRESS -s EXPORTED_FUNCTIONS=\"[_malloc,_main]\"")
+
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}")
 
 	target_link_options(${PROJECT_NAME} PRIVATE
@@ -63,7 +61,7 @@ elseif(EMSCRIPTEN)
 		# "-sEXPORTED_RUNTIME_METHODS=['callMain', 'ccall', 'cwrap']"
 		"-sFORCE_FILESYSTEM=1"
 		# "-sUSE_SDL=3"
-		# "-sALLOW_MEMORY_GROWTH=1" 
+	   "-sALLOW_MEMORY_GROWTH=1" 
 		"-sASYNCIFY"
 		# "-O2"
         "-sWASM=1"
@@ -102,6 +100,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     blackboard::app
     blackboard::gfx
+    -pthread
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -94,6 +94,7 @@ void set_blender_theme()
   style.FrameBorderSize = 0.00f;
   style.FrameRounding = 4.00f;
   style.GrabRounding = 12.00f;
+  style.WindowBorderSize = 0.0f;
 }
 
 void set_blackboard_theme()
@@ -202,6 +203,7 @@ void set_blackboard_theme()
   style.WindowRounding = 2.0f;
   style.ChildRounding = 2.0f;
   style.FrameRounding = 2.0f;
+  style.WindowBorderSize = 0.0f;
 }
 
 bool load_font(const std::filesystem::path &path, const float size, const float ddpi, const bool set_as_default,

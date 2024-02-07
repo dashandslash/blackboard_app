@@ -21,9 +21,10 @@
 
 namespace blackboard::app {
 
-void loopFunction()
+void loopFunction(void* data)
 {
-    logger::logger->info("Looping");
+    auto app = static_cast<App*>(data);
+    app->loop();
 }
 
 App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t width, const uint16_t height,
@@ -44,20 +45,6 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
 
   main_window->init_platform_window();
   gui::init();
-  if(renderer::init(*main_window, m_renderer_api, main_window->width, main_window->height))
-  {
-    main_window->title = app_name;
-    main_window->width = width;
-    main_window->height = height;
-    main_window->fullscreen = fullscreen;
-  }
-  else
-  {
-    logger::logger->error("Renderer not initialized");
-    main_window.reset();
-    return;
-  }
-
   switch (m_renderer_api)
   {
     case renderer::Api::METAL:
@@ -79,6 +66,7 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
     }
     break;
     case renderer::Api::OPENGL:
+    case renderer::Api::WEBGL:
     {
       ImGui_ImplSDL3_InitForVulkan(main_window->window);
       SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -88,30 +76,27 @@ App::App(const char *app_name, const renderer::Api renderer_api, const uint16_t 
       logger::logger->info("Render context not initialized");
       break;
   }
+  if(renderer::init(*main_window, m_renderer_api, main_window->width, main_window->height))
+  {
+    main_window->title = app_name;
+    main_window->width = width;
+    main_window->height = height;
+    main_window->fullscreen = fullscreen;
+  }
+  else
+  {
+    logger::logger->error("Renderer not initialized");
+    main_window.reset();
+    return;
+  }
 
   logger::logger->info("Ending App constructor");
-  emscripten_set_main_loop(loopFunction, 0, 1);
 }
 
-void App::run()
+void App::loop()
 {
-  on_init();
-
-  if (ImGui::GetCurrentContext() && main_window)
-  {
-    auto layout_ui = resources::path() / "imgui.ini";
-    if (!std::filesystem::exists(layout_ui))
-    {
-      layout_ui = resources::path() / "assets/layouts/default_imgui.ini";
-    }
-    ImGui::LoadIniSettingsFromDisk(layout_ui.string().c_str());
-    const auto [drawable_width, drawable_height] = main_window->get_size_in_pixels();
-    on_resize(drawable_width, drawable_height);
-
-    SDL_Event event;
-    while (running)
-    {
-      while (main_window->window != nullptr && SDL_PollEvent(&event))
+  SDL_Event event;
+  while (main_window->window != nullptr && SDL_PollEvent(&event))
       {
         ImGui_ImplSDL3_ProcessEvent(&event);
         const bool is_main_window = event.window.windowID == SDL_GetWindowID(main_window->window);
@@ -150,7 +135,32 @@ void App::run()
       }
 
       bgfx::frame();
+}
+
+void App::run()
+{
+  on_init();
+
+  if (ImGui::GetCurrentContext() && main_window)
+  {
+    auto layout_ui = resources::path() / "imgui.ini";
+    if (!std::filesystem::exists(layout_ui))
+    {
+      layout_ui = resources::path() / "assets/layouts/default_imgui.ini";
     }
+    ImGui::LoadIniSettingsFromDisk(layout_ui.string().c_str());
+    const auto [drawable_width, drawable_height] = main_window->get_size_in_pixels();
+    on_resize(drawable_width, drawable_height);
+
+#ifdef __EMSCRIPTEN__
+  emscripten_set_main_loop_arg(loopFunction, this, 0, true);
+#else
+  while (running)
+  {
+    loop();
+  }
+  
+#endif 
   }
   else
   {

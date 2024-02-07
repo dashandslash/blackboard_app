@@ -29,6 +29,10 @@ elseif(LINUX)
 	project (${PROJECT_NAME} C CXX)
 elseif(EMSCRIPTEN)
 	project (${PROJECT_NAME} C CXX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mbulk-memory")
+	add_compile_options("SHELL:-s USE_PTHREADS")
+  
+	add_link_options("SHELL:-s USE_PTHREADS")
 endif()
 
 include(cmake/fetch_external_dependencies.cmake)

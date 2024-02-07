@@ -25,7 +25,9 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
   }
 
   bgfx::Init bgfx_init;
+  #ifndef __EMSCRIPTEN__
   bgfx::renderFrame();    // single threaded mode
+  #endif
   switch (renderer_api)
   {
     case Api::METAL:
@@ -49,9 +51,12 @@ bool init(app::Window &window, Api &renderer_api, const uint16_t width, const ui
   bgfx_init.resolution.height = drawable_height;
   bgfx_init.resolution.numBackBuffers = 1;
   bgfx_init.resolution.reset = BGFX_RESET_VSYNC | BGFX_RESET_HIDPI | BGFX_RESET_MSAA_X4; 
-  #ifdef SDL_VIDEO_DRIVER_X11
+
+  #if defined (SDL_VIDEO_DRIVER_X11) && ! defined (__EMSCRIPTEN__)  
     bgfx_init.platformData.ndt = SDL_GetProperty(SDL_GetWindowProperties(window.window), "SDL.window.x11.display", NULL);
     bgfx_init.platformData.nwh = (void *)window_handle;
+  #elif defined (__EMSCRIPTEN__)
+    bgfx_init.platformData.nwh = (void*)window_handle;
   #endif
   bgfx::init(bgfx_init);
 

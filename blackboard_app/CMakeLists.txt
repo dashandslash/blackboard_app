@@ -42,20 +42,36 @@ target_link_libraries(${PROJECT_NAME}
     spdlog
 )
 
+# set(WASM_BUILD_FLAGS "\
+# -s SINGLE_FILE=1 \
+# -s EXPORT_ES6=0 \
+# -s MODULARIZE=1 \
+# -s NO_EXIT_RUNTIME=1 \
+# -s ENVIRONMENT=web,worker \
+# -s INVOKE_RUN=0 \
+# -s ASSERTIONS=1 \
+# -s NO_DISABLE_EXCEPTION_CATCHING=1 \
+# -s STACK_SIZE=655360 \
+# -s INITIAL_MEMORY=52428800 \
+# -s EXPORTED_RUNTIME_METHODS=ccall,cwrap  \
+# -s EXPORTED_FUNCTIONS=${WASM_EXPORTED_FUNCTIONS} \
+# -s USE_PTHREADS")
+# set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}")
+# add_compile_options("-pthread")
 add_compile_definitions("__EMSCRIPTEN__")
-target_link_options(${PROJECT_NAME} PRIVATE
-    "-sMODULARIZE=1"
-    "-sEXPORT_NAME='Main'"
-    "-sINVOKE_RUN=0"
-    "-sDISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0"
-    "-sEXPORTED_FUNCTIONS=['_main']"
-    "-sEXPORTED_RUNTIME_METHODS=['callMain', 'ccall', 'cwrap']"
-    "-sFORCE_FILESYSTEM=1"
-    "-sUSE_SDL=3"
-    "-sALLOW_MEMORY_GROWTH=1" 
-    "-sASYNCIFY"
-    "-O2"
-)
+# target_link_options(${PROJECT_NAME} PRIVATE
+#     "-sMODULARIZE=1"
+#     # "-sEXPORT_NAME='Main'"
+#     "-sINVOKE_RUN=0"
+#     "-sDISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0"
+#     "-sEXPORTED_FUNCTIONS=['_main']"
+#     "-sEXPORTED_RUNTIME_METHODS=['callMain', 'ccall', 'cwrap']"
+#     "-sFORCE_FILESYSTEM=1"
+#     "-sUSE_SDL=3"
+#     "-sALLOW_MEMORY_GROWTH=1" 
+#     "-sASYNCIFY"
+#     "-O2"
+# )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
